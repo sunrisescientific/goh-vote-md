@@ -7,12 +7,12 @@ To switch to your branch:<br/>
 git checkout -b your_branch
 
 To push local changes to your branch:<br/>
-git add .
-git commit -m "Description"
+git add .<br/>
+git commit -m "Description"<br/>
 git push origin your_branch
 
 To merge your branch to main:<br/>
-Click compare & pull request.
-Make sure base branch is main and compare branch is your-branch.
-Create pull request.
+Click compare & pull request.<br/>
+Make sure base branch is main and compare branch is your-branch.<br/>
+Create pull request.<br/>
 Review then click merge pull request -> confirm merge.
