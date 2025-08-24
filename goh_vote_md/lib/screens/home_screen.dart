@@ -130,7 +130,7 @@ class HomeScreen extends StatelessWidget {
 
                       LayoutBuilder(
                         builder: (context, constraints) {
-                          final buttonWidth = (constraints.maxWidth - 16) / 2;
+                          final double buttonWidth = ((constraints.maxWidth - 16) / 2).clamp(0, double.infinity);
 
                           return Column(
                             children: [
