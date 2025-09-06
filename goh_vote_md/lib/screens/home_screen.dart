@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'check_registration.dart';
+import 'helpful_links.dart';
+import 'contact.dart';
+import 'faqs.dart';
+import 'locations.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
 
@@ -17,7 +21,25 @@ class HomeScreen extends StatelessWidget {
       "Montgomery",
       "Prince George's",
       "Howard",
-      "Anne Arundel"
+      "Anne Arundel",
+      "Garrett",
+      "Calvert",
+      "Frederick",
+      "Harford",
+      "Talbot",
+      "Charles",
+      "Dorchester",
+      "Kent",
+      "Caroline",
+      "Allegany",
+      "Wicomico",
+      "Carroll",
+      "Washington",
+      "St. Mary's",
+      "Somerset",
+      "Worcester",
+      "Cecil",
+      "Queen Anne's"
     ];
 
     return Scaffold(
@@ -126,7 +148,7 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 40),
 
                       LayoutBuilder(
                         builder: (context, constraints) {
@@ -149,7 +171,7 @@ class HomeScreen extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const RegistrationPage(),
+                                              const RegistrationScreen(),
                                         ),
                                       );
                                     },
@@ -164,13 +186,28 @@ class HomeScreen extends StatelessWidget {
                                     icon: Icons.list,
                                     label: "FAQs",
                                     width: buttonWidth,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const FAQSScreen(),
+                                        ),
+                                      );},
                                   ),
                                   ElectionButton(
                                     icon: Icons.phone,
                                     label: "Contact",
                                     width: buttonWidth,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ContactScreen(),
+                                          ),
+                                        );
+                                    },
                                   ),
                                 ],
                               ),
@@ -185,7 +222,15 @@ class HomeScreen extends StatelessWidget {
                                       label: "Helpful Links",
                                       width: buttonWidth,
                                       height: 60,
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HelpfulLinksScreen(),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                   const SizedBox(width: 16),
@@ -195,7 +240,14 @@ class HomeScreen extends StatelessWidget {
                                       label: "Locations",
                                       width: buttonWidth,
                                       height: 60,
-                                      onPressed: () {},
+                                      onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LocationsScreen(),
+                                        ),
+                                      );},
                                     ),
                                   ),
                                 ],
