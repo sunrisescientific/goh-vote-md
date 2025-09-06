@@ -1,7 +1,7 @@
 # GOH Vote Maryland
 
 A Flutter mobile application that helps users access Maryland election resources.  
-Users can quickly **check their voter registration, view the election calendar, access FAQs, find county-specific locations, and get helpful links** — all in one app.
+Users can quickly **check their voter registration, view the election calendar, access FAQs, find county-specific locations, and get helpful links**.
 
 
 ## Features
