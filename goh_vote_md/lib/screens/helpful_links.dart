@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'home_screen.dart';
 import 'check_registration.dart';
 import 'contact.dart';
@@ -15,14 +16,14 @@ class HelpfulLinksScreen extends StatefulWidget {
 class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
   int _selectedIndex = 0;
 
-  final List<String> helpfulLinks = [
-    "Register to Vote",
-    "Become a Poll Worker",
-    "Become an Election Judge",
-    "Press Releases",
-    "Request a Mail-in Ballot",
-    "Permanent Mail-in",
-  ];
+  final Map<String, String> helpfulLinks = {
+    "Register to Vote": "https://voterservices.elections.maryland.gov/OnlineVoterRegistration/InstructionsStep1",
+    "Become a Poll Worker": "https://elections.maryland.gov/get_involved/registration_volunteers.html",
+    "Become an Election Judge": "https://elections.maryland.gov/get_involved/election_judges_form.html",
+    "Press Releases": "https://elections.maryland.gov/press_room/index.html",
+    "Request a Mail-in Ballot": "https://voterservices.elections.maryland.gov/OnlineMailinRequest/InstructionsStep1",
+    "Permanent Mail-in": "https://elections.maryland.gov/voting/absentee.html",
+  };
 
   void _onItemTapped(int index) {
     setState(() {
@@ -56,6 +57,14 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
       );
     }
   }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +125,7 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
               SizedBox(height: screenHeight * 0.02),
 
               Column(
-                children: helpfulLinks.map((link) {
+                children: helpfulLinks.entries.map((entry) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: screenHeight * 0.008),
                     child: SizedBox(
@@ -134,11 +143,10 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
                             ),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () => _launchURL(entry.value),
                         child: Text(
-                          link,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 23),
+                          entry.key,
+                          style: const TextStyle(color: Colors.black, fontSize: 23),
                         ),
                       ),
                     ),

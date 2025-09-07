@@ -37,7 +37,9 @@ class ContactCard extends StatelessWidget {
                           fontWeight: FontWeight.w700, color: Colors.black, fontSize: 20)),
                 ),
                 if (dropdown != null) dropdown!,
+                SizedBox(height: screenHeight * 0.01),
                 ...rows,
+                SizedBox(height: screenHeight * 0.03)
               ],
             ),
           ),

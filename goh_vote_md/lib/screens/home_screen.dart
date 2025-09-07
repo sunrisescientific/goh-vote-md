@@ -4,43 +4,13 @@ import 'helpful_links.dart';
 import 'contact.dart';
 import 'faqs.dart';
 import 'locations.dart';
-import 'package:provider/provider.dart';
-import '../providers/county_provider.dart';
+import '../widgets/county_dropdown.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final countyProvider = Provider.of<CountyProvider>(context);
-    final selectedCounty = countyProvider.selectedCounty;
-
-    final counties = [
-      "County",
-      "Baltimore",
-      "Montgomery",
-      "Prince George's",
-      "Howard",
-      "Anne Arundel",
-      "Garrett",
-      "Calvert",
-      "Frederick",
-      "Harford",
-      "Talbot",
-      "Charles",
-      "Dorchester",
-      "Kent",
-      "Caroline",
-      "Allegany",
-      "Wicomico",
-      "Carroll",
-      "Washington",
-      "St. Mary's",
-      "Somerset",
-      "Worcester",
-      "Cecil",
-      "Queen Anne's"
-    ];
 
     return Scaffold(
       body: SafeArea(
@@ -108,42 +78,7 @@ class HomeScreen extends StatelessWidget {
                             style: TextStyle(fontSize: 14),
                           ),
                           Expanded(
-                            child: Container(
-                              height: 40,
-                              width: 140,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    spreadRadius: 1,
-                                    blurRadius: 6,
-                                    offset: Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: selectedCounty,
-                                  isExpanded: true,
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  onChanged: (String? newValue) {
-                                    if (newValue != null) {
-                                      countyProvider.setCounty(newValue);
-                                    }
-                                  },
-                                  items: counties.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value,
-                                          style: const TextStyle(fontSize: 14)),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
+                            child: CountyDropdown(),
                           ),
                         ],
                       ),

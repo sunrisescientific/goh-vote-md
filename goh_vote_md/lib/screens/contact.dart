@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
-import '../data/counties.dart';
 import '../widgets/contact_card.dart';
 import '../widgets/contact_row.dart';
 import 'home_screen.dart';
 import 'check_registration.dart';
+import '../widgets/county_dropdown.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -49,26 +49,7 @@ class _ContactScreenState extends State<ContactScreen> {
       ContactRow(icon: Icons.numbers, text: "instagram.com/md_sbe"),
     ];
 
-    Widget countyDropdown = Container(
-      width: screenWidth * 0.35,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), spreadRadius: 1, blurRadius: 6, offset: const Offset(0, 3))],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectedCounty,
-          isExpanded: true,
-          icon: const Icon(Icons.arrow_drop_down),
-          onChanged: (newValue) {
-            if (newValue != null) countyProvider.setCounty(newValue);
-          },
-          items: counties.map((e) => DropdownMenuItem(value: e, child: Text(e, style: const TextStyle(fontSize: 14)))).toList(),
-        ),
-      ),
-    );
+    Widget countyDropdown = CountyDropdown();
 
     List<ContactRow> countyRows = countyProvider.selectedCountyContact != null
         ? [
@@ -112,7 +93,14 @@ class _ContactScreenState extends State<ContactScreen> {
               if (countyProvider.selectedCountyContact != null)
                 ContactCard(title: "${selectedCounty} Election Office Contact", rows: countyRows, dropdown: countyDropdown),
               if (countyProvider.selectedCountyContact == null)
-                ContactCard(title: "State Election Office Contacts", rows: [], dropdown: countyDropdown),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16.0),
+                  child: ContactCard(
+                    title: "State Election Office Contacts",
+                    rows: [],
+                    dropdown: countyDropdown,
+                  ),
+                )
             ],
           ),
         ),
