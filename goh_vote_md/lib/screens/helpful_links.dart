@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'home_screen.dart';
-import 'check_registration.dart';
-import 'contact.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class HelpfulLinksScreen extends StatefulWidget {
   const HelpfulLinksScreen({super.key});
@@ -14,7 +11,6 @@ class HelpfulLinksScreen extends StatefulWidget {
 }
 
 class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
-  int _selectedIndex = 0;
 
   final Map<String, String> helpfulLinks = {
     "Register to Vote": "https://voterservices.elections.maryland.gov/OnlineVoterRegistration/InstructionsStep1",
@@ -25,45 +21,12 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
     "Permanent Mail-in": "https://elections.maryland.gov/voting/absentee.html",
   };
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-      );
-    } else if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-      );
-    } else if (index ==3) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-      );
-    } else if (index == 4) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const ContactScreen()),
-      );
-    }
-  }
-
-  Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw 'Could not launch $url';
-    }
-  }
+  // Future<void> _launchURL(String url) async {
+  //   final Uri uri = Uri.parse(url);
+  //   if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
 
   @override
@@ -143,7 +106,8 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
                             ),
                           ),
                         ),
-                        onPressed: () => _launchURL(entry.value),
+                        onPressed: () {},
+                        // _launchURL(entry.value),
                         child: Text(
                           entry.key,
                           style: const TextStyle(color: Colors.black, fontSize: 23),
@@ -156,24 +120,6 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        backgroundColor: const Color(0xFFB60022),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        iconSize: 40,
-        type: BottomNavigationBarType.fixed,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Registration'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Calendar'),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'FAQs'),
-          BottomNavigationBarItem(icon: Icon(Icons.phone), label: 'Contact'),
-        ],
       ),
     );
   }

@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
 import '../widgets/contact_card.dart';
 import '../widgets/contact_row.dart';
-import 'home_screen.dart';
-import 'check_registration.dart';
 import '../widgets/county_dropdown.dart';
 
 class ContactScreen extends StatefulWidget {
@@ -15,23 +13,6 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  int _selectedIndex = 4;
-
-  final List<Widget> pages = [
-    const HomeScreen(),
-    const RegistrationScreen(),
-    const RegistrationScreen(),
-    const RegistrationScreen(),
-    const ContactScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() => _selectedIndex = index);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => pages[index]),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,24 +85,6 @@ class _ContactScreenState extends State<ContactScreen> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        backgroundColor: const Color(0xFFB60022),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: const Color.fromARGB(120, 255, 255, 255),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        iconSize: 40,
-        type: BottomNavigationBarType.fixed,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Registration'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Calendar'),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'FAQs'),
-          BottomNavigationBarItem(icon: Icon(Icons.phone), label: 'Contact'),
-        ],
       ),
     );
   }

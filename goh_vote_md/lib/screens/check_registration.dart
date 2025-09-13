@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
-import 'home_screen.dart';
-import 'contact.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -12,45 +10,11 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  int _selectedIndex = 1;
 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _dobController = TextEditingController();
   final _zipController = TextEditingController();
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-      );
-    } else if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-      );
-    } else if (index ==3) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-      );
-    } else if (index == 4) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const ContactScreen()),
-      );
-    }
-  }
 
   Widget _buildInputField(String label, TextEditingController controller) {
     return Column(
@@ -177,25 +141,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ],
           ),
         ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        backgroundColor: const Color(0xFFB60022),
-        selectedItemColor: const Color(0xFFFFFFFF),
-        unselectedItemColor: const Color.fromARGB(120, 255, 255, 255),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        iconSize: 40,
-        type: BottomNavigationBarType.fixed,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Registration'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Calendar'),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'FAQs'),
-          BottomNavigationBarItem(icon: Icon(Icons.phone), label: 'Contact'),
-        ],
       ),
     );
   }
