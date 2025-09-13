@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelpfulLinksScreen extends StatefulWidget {
   const HelpfulLinksScreen({super.key});
@@ -21,12 +21,12 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
     "Permanent Mail-in": "https://elections.maryland.gov/voting/absentee.html",
   };
 
-  // Future<void> _launchURL(String url) async {
-  //   final Uri uri = Uri.parse(url);
-  //   if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
+  }
 
 
   @override
@@ -106,8 +106,8 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
                             ),
                           ),
                         ),
-                        onPressed: () {},
-                        // _launchURL(entry.value),
+                        onPressed: ()  =>
+                        _launchURL(entry.value),
                         child: Text(
                           entry.key,
                           style: const TextStyle(color: Colors.black, fontSize: 23),
