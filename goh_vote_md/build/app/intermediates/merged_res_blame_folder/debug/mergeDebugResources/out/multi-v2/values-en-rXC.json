@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-25:/values-en-rXC/values-en-rXC.xml",
+            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-29:/values-en-rXC/values-en-rXC.xml",
             "map": [
                 {
-                    "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/8cf478dec41eed746328fa8046755ba2/transformed/core-1.13.1/res/values-en-rXC/values-en-rXC.xml",
+                    "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/6e9b87ddca682c26951d767f3a5f05e2/transformed/core-1.16.0/res/values-en-rXC/values-en-rXC.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

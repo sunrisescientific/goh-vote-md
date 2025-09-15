@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
+import '../widgets/screen_header.dart';
+import '../data/constants.dart';
 
 class ExpandableSection extends StatefulWidget
 {
@@ -36,12 +38,12 @@ class _ExpandableSectionState extends State<ExpandableSection>
         decoration: BoxDecoration
         (
           color: Colors.white,
-          border: Border.all(color: Color(0xFFB60022), width: 3),
+          border: Border.all(color: MARYLAND_RED, width: 3),
           boxShadow:
           [
             BoxShadow
             (
-              color: Color(0xFFFFA100),
+              color: MARYLAND_YELLOW,
               spreadRadius: 0.5,
               blurRadius: 0,
               offset: Offset(2.5, 2.5),
@@ -89,13 +91,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                             child: Text
                             (
                               widget.event,
-                              style: TextStyle
-                              (
-                                fontSize: 16,
-                                fontFamily: "Inter",
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold
-                              ),
+                              style: heading3,
                               softWrap: true,
                             ),
                           ),
@@ -215,7 +211,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                         {},
                         style: ElevatedButton.styleFrom
                         (
-                          backgroundColor: Color(0xFFFFA100),
+                          backgroundColor: MARYLAND_YELLOW,
                           padding: EdgeInsets.symmetric
                           (
                             horizontal: 32,
@@ -308,8 +304,8 @@ class CalendarScreen extends StatelessWidget
   {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = Dimensions.screenHeight;
+    final screenWidth =  Dimensions.screenWidth;
     return Scaffold
     (
       body: SafeArea(
@@ -321,49 +317,11 @@ class CalendarScreen extends StatelessWidget
           children:
           [
 
-            Center(
-                child: Image.asset(
-                  'assets/title_logo.png',
-                  height: screenHeight * 0.12,
-                  fit: BoxFit.contain,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.006),
-              SizedBox(
-                height: screenHeight * 0.05,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFB60022),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.05,
-                      vertical: 0,
-                    ),
-                  ),
-                  onPressed: () {},
-                  icon: const Icon(Icons.pin_drop,
-                      color: Colors.white, size: 20),
-                  label: Text(
-                    selectedCounty.toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenWidth * 0.04,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              const Text(
-                "Election Calendar",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
+            ScreenHeader(
+              logoPath: 'assets/title_logo.png',
+              countyName: selectedCounty,
+              title: "Election Calendar",
+            ),
             Container
             (
               padding: EdgeInsets.symmetric(vertical: 4, horizontal: 100),

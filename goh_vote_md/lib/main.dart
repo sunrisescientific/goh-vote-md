@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'providers/county_provider.dart';
 import 'screens/check_registration.dart';
@@ -8,8 +9,16 @@ import 'screens/faqs.dart';
 import 'screens/helpful_links.dart';
 import 'screens/locations.dart';
 import 'widgets/county_dropdown.dart';
+import 'widgets/nav_bar.dart';
+import 'data/constants.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(
     ChangeNotifierProvider(
       create: (_) => CountyProvider(),
@@ -60,49 +69,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          backgroundColor: const Color(0xFFB60022),
-          indicatorColor: Colors.transparent,
-          iconTheme: WidgetStateProperty.resolveWith<IconThemeData>(
-            (states) {
-              if (states.contains(WidgetState.selected)) {
-                return const IconThemeData(
-                    color: Color(0xFFFFFFFF), size: 40); 
-              }
-              return const IconThemeData(
-                  color: Color(0x88E5E5E5), size: 40); 
-            },
-          ),
-        ),
-        child: _selectedIndex == 0
-            ? const SizedBox(height: 0)
-            : NavigationBar(
-                selectedIndex: _selectedIndex,
-                onDestinationSelected: onItemTapped,
-                labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-                labelTextStyle: MaterialStateProperty.all(
-                  const TextStyle(
-                    fontSize: 11, 
-                    color: Colors.white, 
-                  ),
-                ),
-                destinations: const [
-                  NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-                  NavigationDestination(
-                      icon: Icon(Icons.person), label: 'Look up'),
-                  NavigationDestination(
-                      icon: Icon(Icons.calendar_month), label: 'Calendar'),
-                  NavigationDestination(
-                      icon: Icon(Icons.list), label: 'FAQ'),
-                  NavigationDestination(
-                      icon: Icon(Icons.phone), label: 'Contact'),
-                  NavigationDestination(
-                      icon: Icon(Icons.link), label: 'Links'),
-                  NavigationDestination(
-                      icon: Icon(Icons.location_on), label: 'Locations'),
-                ],
-              ),
+      bottomNavigationBar: NavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: onItemTapped,
       ),
     );
   }
@@ -113,7 +82,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Dimensions.init(context);
     final homeState = context.findAncestorStateOfType<_HomePageState>();
+    final screenHeight = Dimensions.screenHeight;
+    final screenWidth =  Dimensions.screenWidth;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -123,7 +95,7 @@ class HomeScreen extends StatelessWidget {
             Center(
               child: Image.asset(
                 'assets/title_logo.png',
-                height: MediaQuery.of(context).size.height * 0.12,
+                height: topLogoSize,
                 fit: BoxFit.contain,
               ),
             ),
@@ -136,49 +108,45 @@ class HomeScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                   opacity: const AlwaysStoppedAnimation(0.5),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 100, left: 20, right: 20),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: screenHeight * 0.08,
+                    left: screenWidth * 0.04,
+                  ),
                   child: Text(
-                    "Tag Line\n / App\n Name",
-                    style: TextStyle(
-                      color: Color(0xFFB60022),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 35,
-                    ),
+                    "GOH\nVote\nMaryland",
+                    style: appName,
                   ),
                 ),
               ],
             ),
 
             Transform.translate(
-              offset: const Offset(0, -40),
+              offset: Offset(0, -screenHeight * 0.05),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Welcome!",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge
-                          ?.copyWith(
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            fontSize: 50,
+                            fontSize: screenHeight * 0.06,
                           ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
+                    SizedBox(height: screenHeight * 0.01),
+                    Text(
                       "Select a county and an option below",
-                      style: TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: screenHeight * 0.018),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: screenHeight * 0.015),
 
                     Row(
                       children: [
-                        const Text(
+                        Text(
                           "Selected county: ",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: screenHeight * 0.018),
                         ),
                         Expanded(
                           child: CountyDropdown(),
@@ -186,76 +154,56 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 40),
+                    SizedBox(height: screenHeight * 0.05),
 
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final double buttonWidth =
-                            ((constraints.maxWidth - 16) / 2)
+                            ((constraints.maxWidth - screenWidth * 0.04) / 2)
                                 .clamp(0, double.infinity);
 
                         return Column(
                           children: [
                             Wrap(
-                              spacing: 16,
-                              runSpacing: 16,
+                              spacing: screenWidth * 0.04,
+                              runSpacing: screenHeight * 0.02,
                               alignment: WrapAlignment.center,
                               children: [
                                 ElectionButton(
                                   icon: Icons.person,
                                   label: "Check\nRegistration",
                                   width: buttonWidth,
-                                  onPressed: () =>
-                                      homeState?.onItemTapped(1),
+                                  onPressed: () => homeState?.onItemTapped(1),
                                 ),
                                 ElectionButton(
                                   icon: Icons.calendar_today,
                                   label: "Election\nCalendar",
                                   width: buttonWidth,
-                                  onPressed: () =>
-                                      homeState?.onItemTapped(2),
+                                  onPressed: () => homeState?.onItemTapped(2),
                                 ),
                                 ElectionButton(
                                   icon: Icons.list,
                                   label: "FAQs",
                                   width: buttonWidth,
-                                  onPressed: () =>
-                                      homeState?.onItemTapped(3),
+                                  onPressed: () => homeState?.onItemTapped(3),
                                 ),
                                 ElectionButton(
                                   icon: Icons.phone,
                                   label: "Contact",
                                   width: buttonWidth,
-                                  onPressed: () =>
-                                      homeState?.onItemTapped(4),
+                                  onPressed: () => homeState?.onItemTapped(4),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: ElectionButton(
-                                    icon: Icons.link,
-                                    label: "Helpful Links",
-                                    width: buttonWidth,
-                                    height: 60,
-                                    onPressed: ()  =>
-                                      homeState?.onItemTapped(5),
-                                  ),
+                                ElectionButton(
+                                  icon: Icons.link,
+                                  label: "Helpful Links",
+                                  width: buttonWidth,
+                                  onPressed: () => homeState?.onItemTapped(5),
                                 ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: ElectionButton(
-                                    icon: Icons.location_on,
-                                    label: "Locations",
-                                    width: buttonWidth,
-                                    height: 60,
-                                   onPressed: () =>
-                                      homeState?.onItemTapped(6),
-                                  ),
+                                ElectionButton(
+                                  icon: Icons.location_on,
+                                  label:  "Locations",
+                                  width: buttonWidth,
+                                  onPressed: () => homeState?.onItemTapped(6),
                                 ),
                               ],
                             ),
@@ -264,7 +212,7 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: screenHeight * 0.02),
                   ],
                 ),
               ),
@@ -294,23 +242,26 @@ class ElectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = Dimensions.screenHeight;
+    final screenWidth =  Dimensions.screenWidth;
+
     return SizedBox(
       width: width,
       height: height,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFB60022),
+          backgroundColor: MARYLAND_RED,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.015),
         ),
         onPressed: onPressed,
-        icon: Icon(icon, size: 24, color: Colors.white),
+        icon: Icon(icon, size: homePageIconSize, color: Colors.white),
         label: Text(
           label,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
+          style: homePageButtons,
         ),
       ),
     );

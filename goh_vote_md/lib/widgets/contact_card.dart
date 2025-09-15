@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'contact_row.dart';
+import '../data/constants.dart';
 
 class ContactCard extends StatelessWidget {
   final String title;
@@ -10,8 +11,8 @@ class ContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = Dimensions.screenHeight;
+    final screenWidth =  Dimensions.screenWidth;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenHeight * 0.008),
@@ -21,7 +22,7 @@ class ContactCard extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              side: const BorderSide(color: Color(0xFFFFA100), width: 3),
+              side: const BorderSide(color: MARYLAND_YELLOW, width: 3),
             ),
           ),
           onPressed: () {},
@@ -33,8 +34,7 @@ class ContactCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
                   child: Text(title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700, color: Colors.black, fontSize: 20)),
+                      style: heading3),
                 ),
                 if (dropdown != null) dropdown!,
                 SizedBox(height: screenHeight * 0.01),

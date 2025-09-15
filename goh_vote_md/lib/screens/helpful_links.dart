@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../widgets/screen_header.dart';
+import '../data/constants.dart';
 
 class HelpfulLinksScreen extends StatefulWidget {
   const HelpfulLinksScreen({super.key});
@@ -33,8 +35,8 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = Dimensions.screenHeight;
+    final screenWidth =  Dimensions.screenWidth;
 
     return Scaffold(
       body: SafeArea(
@@ -43,49 +45,11 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(
-                child: Image.asset(
-                  'assets/title_logo.png',
-                  height: screenHeight * 0.12,
-                  fit: BoxFit.contain,
-                ),
+              ScreenHeader(
+                logoPath: 'assets/title_logo.png',
+                countyName: selectedCounty,
+                title: "Helpful Links",
               ),
-              SizedBox(height: screenHeight * 0.006),
-              SizedBox(
-                height: screenHeight * 0.05,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFB60022),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.05,
-                      vertical: 0,
-                    ),
-                  ),
-                  onPressed: () {},
-                  icon: const Icon(Icons.pin_drop,
-                      color: Colors.white, size: 20),
-                  label: Text(
-                    selectedCounty.toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenWidth * 0.04,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              const Text(
-                "Helpful Links",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
 
               Column(
                 children: helpfulLinks.entries.map((entry) {
@@ -99,9 +63,9 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
                           backgroundColor: Colors.white,
                           elevation: 7,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(0),
                             side: const BorderSide(
-                              color: Color(0xFFFFA100),
+                              color: MARYLAND_YELLOW,
                               width: 2,
                             ),
                           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
+import '../widgets/screen_header.dart';
+import '../data/constants.dart';
 
 class ExpandableSection extends StatefulWidget
 {
@@ -154,7 +156,7 @@ class FAQCategory extends StatelessWidget
           title,
           style: const TextStyle
           (
-            color: Color(0xFFB60022),
+            color: MARYLAND_RED,
             fontFamily: 'Inter',
             fontSize: 24,
             fontWeight: FontWeight.w600,
@@ -234,8 +236,8 @@ class FAQScreen extends StatelessWidget
   {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = Dimensions.screenHeight;
+    final screenWidth =  Dimensions.screenWidth;
 
     return Scaffold(
       body: SafeArea(
@@ -247,27 +249,11 @@ class FAQScreen extends StatelessWidget
           crossAxisAlignment: CrossAxisAlignment.center,
           children:
           [
-            Center(
-                child: Image.asset('assets/title_logo.png', height: screenHeight * 0.12, fit: BoxFit.contain),
-              ),
-              SizedBox(height: screenHeight * 0.006),
-              SizedBox(
-                height: screenHeight * 0.05,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFB60022),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 0),
-                  ),
-                  onPressed: () {},
-                  icon: const Icon(Icons.pin_drop, color: Colors.white, size: 20),
-                  label: Text(selectedCounty.toUpperCase(),
-                      style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.04, fontWeight: FontWeight.bold)),
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              const Text("FAQs", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black)),
-              SizedBox(height: screenHeight * 0.02), 
+            ScreenHeader(
+              logoPath: 'assets/title_logo.png',
+              countyName: selectedCounty,
+              title: "FAQs",
+            ),
             FAQCategory
             (
               title: "Voting",
