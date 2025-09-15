@@ -36,7 +36,7 @@ class ScreenHeader extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: MARYLAND_RED,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(roundedCorners)),
               padding: EdgeInsets.symmetric(
                 horizontal: screenWidth * 0.05,
                 vertical: 0,

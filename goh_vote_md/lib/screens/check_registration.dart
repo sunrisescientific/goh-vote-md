@@ -48,7 +48,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
 
             Expanded(
-              child: WebViewWidget(controller: controller),
+              child: Padding(
+                padding: EdgeInsets.all(Dimensions.screenWidth * 0.05),
+                child: WebViewWidget(controller: controller),
+              ),
             ),
           ],
         ),

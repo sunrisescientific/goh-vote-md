@@ -328,7 +328,7 @@ class CalendarScreen extends StatelessWidget
               decoration: BoxDecoration
               (
                 color: Colors.black,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(roundedCorners),
               ),
               child: Text
               (

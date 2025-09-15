@@ -25,7 +25,7 @@ class CountyDropdown extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(roundedCorners),
         border: Border.all(color: MARYLAND_RED, width: 1.2),
         boxShadow: [
           BoxShadow(

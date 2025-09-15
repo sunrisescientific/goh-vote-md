@@ -36,7 +36,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
         decoration: BoxDecoration
         (
           color: Colors.white,
-          border: Border.all(color: Colors.black, width: 1),
+          border: Border.all(color: MARYLAND_YELLOW, width: 1.5),
           boxShadow:
           [
             BoxShadow

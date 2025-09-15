@@ -15,6 +15,8 @@ const Color MARYLAND_RED = Color(0xFFB60022);
 const Color MARYLAND_YELLOW = Color(0xFFFFA100);
 const Color UNSELECTED = Color(0x88E5E5E5);
 
+const double roundedCorners = 12.0;
+
 // contacts small header, locations name and tab
 TextStyle heading3 = TextStyle(
   fontSize: Dimensions.screenHeight * 0.018,

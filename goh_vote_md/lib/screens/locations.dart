@@ -39,11 +39,11 @@ class _LocationsScreenState extends State<LocationsScreen> {
                   suffixIcon: const Icon(Icons.search, color: MARYLAND_YELLOW),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(roundedCorners),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(roundedCorners),
                   ),
                 ),
               ),
@@ -124,8 +124,8 @@ class _TabButton extends StatelessWidget {
           color: isSelected ? MARYLAND_RED : Colors.grey[300],
           border: Border.all(color: Colors.grey[400]!),
           borderRadius: BorderRadius.horizontal(
-            left: isFirst ? const Radius.circular(8) : Radius.zero,
-            right: isLast ? const Radius.circular(8) : Radius.zero,
+            left: isFirst ? const Radius.circular(roundedCorners) : Radius.zero,
+            right: isLast ? const Radius.circular(roundedCorners) : Radius.zero,
           ),
         ),
         child: Center(
