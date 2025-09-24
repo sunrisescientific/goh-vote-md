@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../data/counties.dart';
 import '../providers/county_provider.dart';
 import '../data/constants.dart';
-import '../data/constants.dart';
 
 class CountyDropdown extends StatelessWidget {
   const CountyDropdown({super.key});
@@ -17,7 +16,7 @@ class CountyDropdown extends StatelessWidget {
     final screenWidth = Dimensions.screenWidth;
 
     return Container(
-      width: screenWidth * 0.38,
+      width: screenWidth * 0.5,
       height: screenHeight * 0.045,
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.025,
@@ -38,7 +37,7 @@ class CountyDropdown extends StatelessWidget {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: selectedCounty,
+          value: countyProvider.counties.contains(selectedCounty) ? selectedCounty : null,
           isExpanded: true,
           icon: const Icon(
             Icons.arrow_drop_down_rounded,
@@ -53,21 +52,20 @@ class CountyDropdown extends StatelessWidget {
           onChanged: (newValue) {
             if (newValue != null) countyProvider.setCounty(newValue);
           },
-          items: counties
-              .map(
-                (e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(
-                    e,
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.04,
-                      fontWeight: FontWeight.bold,
-                      color: e == selectedCounty ? MARYLAND_RED : Colors.black87,
-                    ),
-                  ),
+          items: countyProvider.counties.map
+          (
+            (e) => DropdownMenuItem(
+              value: e,
+              child: Text(
+                e,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.04,
+                  fontWeight: FontWeight.bold,
+                  color: e == selectedCounty ? MARYLAND_RED : Colors.black87,
                 ),
-              )
-              .toList(),
+              ),
+            ),
+          ).toList(),
         ),
       ),
     );

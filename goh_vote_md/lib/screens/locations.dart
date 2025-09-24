@@ -18,12 +18,11 @@ class _LocationsScreenState extends State<LocationsScreen> {
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
-    final screenWidth = Dimensions.screenWidth;
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+          padding: EdgeInsets.symmetric(horizontal: Dimensions.screenWidth * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -156,13 +155,7 @@ class LocationList extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: MARYLAND_RED, width: 3),
-        boxShadow: const [
-          BoxShadow(
-            color: MARYLAND_YELLOW,
-            offset: Offset(4, 4),
-            blurRadius: 0,
-          ),
-        ],
+        boxShadow: [yellowBoxShadow],
         borderRadius: const BorderRadius.all(Radius.circular(0)),
       ),
       child: ListView.separated(
@@ -195,13 +188,8 @@ class LocationList extends StatelessWidget {
                     child: const Icon(Icons.map, color: Colors.white, size: 20),
                   ),
                 ),
-                const Text(
+                Text(
                   "Directions",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
                 ),
               ],
             ),

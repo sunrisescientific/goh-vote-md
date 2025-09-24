@@ -15,13 +15,11 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-
+  
   @override
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
-    final screenHeight = Dimensions.screenHeight;
-    final screenWidth =  Dimensions.screenWidth;
 
     final stateRows = const [
       ContactRow(icon: Icons.phone, text: "410-269-2840"),
@@ -46,7 +44,7 @@ class _ContactScreenState extends State<ContactScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+          padding: EdgeInsets.symmetric(horizontal: Dimensions.screenWidth * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -58,7 +56,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
               ContactCard(title: "State Board of Election Contact", rows: stateRows),
               if (countyProvider.selectedCountyContact != null)
-                ContactCard(title: "${selectedCounty} Election Office Contact", rows: countyRows, dropdown: countyDropdown),
+                ContactCard(title: "$selectedCounty Election Office Contact", rows: countyRows, dropdown: countyDropdown),
               if (countyProvider.selectedCountyContact == null)
                 Container(
                   margin: const EdgeInsets.only(bottom: 16.0),

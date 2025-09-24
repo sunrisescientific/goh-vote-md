@@ -18,6 +18,8 @@ dependencies:
   webview_flutter: ^4.13.0
   geocoding: ^4.0.0
   geolocator: ^14.0.2
+  add_2_calendar: ^3.0.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +33,7 @@ flutter:
     - assets/title_logo.png
     - assets/top_maryland.png
     - assets/icon.png
+    - assets/counties.tsv
 
 flutter_icons:
   android: true
