@@ -3,6 +3,37 @@ import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
+import 'package:csv/csv.dart';
+import 'package:http/http.dart' as http;
+
+class ElectionEvent {
+  final String date;
+  final String time;
+  final String name;
+  final String description;
+  final String computation;
+  final String legalAuthority;
+
+  ElectionEvent({
+    required this.date,
+    required this.time,
+    required this.name,
+    required this.description,
+    required this.computation,
+    required this.legalAuthority,
+  });
+
+  factory ElectionEvent.fromCsv(List<dynamic> row) {
+    return ElectionEvent(
+      date: row[0]?.toString() ?? "",
+      time: row[1]?.toString() ?? "",
+      name: row[2]?.toString() ?? "",
+      description: row[3]?.toString() ?? "",
+      computation: row[4]?.toString() ?? "",
+      legalAuthority: row[5]?.toString() ?? "",
+    );
+  }
+}
 
 class ExpandableSection extends StatefulWidget
 {
@@ -55,7 +86,6 @@ class _ExpandableSectionState extends State<ExpandableSection>
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
           [
-            // Header Button
             TextButton
             (
               onPressed: ()
@@ -121,7 +151,6 @@ class _ExpandableSectionState extends State<ExpandableSection>
               )
             ),
 
-            // Expandable content
             AnimatedCrossFade
             (
               duration: const Duration(milliseconds: 100),
@@ -246,15 +275,11 @@ class _ExpandableSectionState extends State<ExpandableSection>
 
 class Events extends StatelessWidget
 {
-  final List<String> events;
-  final List<String> dates;
-  final List<String> infos;
+  final List<ElectionEvent> events;
 
   const Events
   ({
     required this.events,
-    required this.dates,
-    required this.infos,
   });
 
   @override
@@ -267,37 +292,93 @@ class Events extends StatelessWidget
       {
         return ExpandableSection
         (
-          event: events[index],
-          date: dates[index],
-          info: infos[index],
+          event: events[index].name,
+          date: events[index].date,
+          info: events[index].description,
         );
       }),
     );
   }
 }
 
-class CalendarScreen extends StatelessWidget
+// ====== CALENDAR SCREEN ======
+class CalendarScreen extends StatefulWidget {
+  const CalendarScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CalendarScreen> createState() => _CalendarScreenState();
+}
+
+class _CalendarScreenState extends State<CalendarScreen>
 {
-  final List<String> eventsList =
-  [
-    "2028 Presidential Election",
-    "2026 Gubernatorial General Election",
-    "2026 Gubernatorial Primary Election",
-  ];
+  // final List<String> eventsList =
+  // [
+  //   "2028 Presidential Election",
+  //   "2026 Gubernatorial General Election",
+  //   "2026 Gubernatorial Primary Election",
+  // ];
 
-  final List<String> datesList =
-  [
-    "Election day: November 7, 2028",
-    "Election day: November 3, 2026",
-    "Election day: June 23, 2026",
-  ];
+  // final List<String> datesList =
+  // [
+  //   "Election day: November 7, 2028",
+  //   "Election day: November 3, 2026",
+  //   "Election day: June 23, 2026",
+  // ];
 
-  final List<String> infosList =
-  [
-    "Early voting: DATE -- DATE",
-    "Early voting: October 22, 2026 -- October 29, 2026",
-    "Early voting: June 11, 2026 -- June 18, 2026",
-  ];
+  // final List<String> infosList =
+  // [
+  //   "Early voting: DATE -- DATE",
+  //   "Early voting: October 22, 2026 -- October 29, 2026",
+  //   "Early voting: June 11, 2026 -- June 18, 2026",
+  // ];
+
+  List<ElectionEvent> _events = [];
+  bool _loading = true;
+  String gid = "0";
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchEvents();
+  }
+
+  Future<void> _fetchEvents() async {
+    try {
+      final url = Uri.parse(
+        sheetsURLStart + gid + sheetsURLEnd
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final csvTable = const CsvToListConverter().convert(response.body);
+        final rows = csvTable.skip(1);
+
+        final now = DateTime.now();
+
+        setState(() {
+          _events = rows.map((r) => ElectionEvent.fromCsv(r))
+            .where((event) {
+              try {
+                final parsedDate = DateTime.tryParse(event.date);
+                if (parsedDate == null) return true;
+                return parsedDate.isAfter(now) || 
+                      parsedDate.isAtSameMomentAs(DateTime(now.year, now.month, now.day));
+              } catch (_) {
+                return true; 
+              }
+            })
+            .toList();
+
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      print("Error fetching sheet: $e");
+      setState(() => _loading = false);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context)
@@ -344,9 +425,7 @@ class CalendarScreen extends StatelessWidget
             SizedBox(height: 12),
             Events
             (
-              events: eventsList,
-              dates: datesList,
-              infos: infosList,
+              events: _events,
             ),
           ],
         ),

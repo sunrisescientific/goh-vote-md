@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../data/counties.dart';
 import '../providers/county_provider.dart';
-import '../data/constants.dart';
 import '../data/constants.dart';
 
 class CountyDropdown extends StatelessWidget {
@@ -11,17 +9,35 @@ class CountyDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
+    final counties = countyProvider.counties;
     final selectedCounty = countyProvider.selectedCounty;
 
     final screenHeight = Dimensions.screenHeight;
     final screenWidth = Dimensions.screenWidth;
+
+    if (counties.isEmpty) {
+      return Container(
+        width: screenWidth * 0.38,
+        height: screenHeight * 0.045,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(roundedCorners),
+          border: Border.all(color: MARYLAND_RED, width: 1.2),
+        ),
+        child: const Text(
+          "Loading...",
+          style: TextStyle(color: Colors.black54, fontSize: 12),
+        ),
+      );
+    }
 
     return Container(
       width: screenWidth * 0.38,
       height: screenHeight * 0.045,
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.025,
-        vertical: screenHeight * 0.004, 
+        vertical: screenHeight * 0.004,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -38,12 +54,12 @@ class CountyDropdown extends StatelessWidget {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: selectedCounty,
+          value: counties.contains(selectedCounty) ? selectedCounty : counties.first,
           isExpanded: true,
           icon: const Icon(
             Icons.arrow_drop_down_rounded,
             color: MARYLAND_RED,
-            size: 20, 
+            size: 20,
           ),
           style: TextStyle(
             fontSize: screenWidth * 0.04,
@@ -55,14 +71,14 @@ class CountyDropdown extends StatelessWidget {
           },
           items: counties
               .map(
-                (e) => DropdownMenuItem(
-                  value: e,
+                (county) => DropdownMenuItem(
+                  value: county,
                   child: Text(
-                    e,
+                    county,
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.bold,
-                      color: e == selectedCounty ? MARYLAND_RED : Colors.black87,
+                      color: county == selectedCounty ? MARYLAND_RED : Colors.black87,
                     ),
                   ),
                 ),
