@@ -40,7 +40,7 @@ double get topLogoSize => Dimensions.screenHeight * 0.12;
 double get navIconSize => Dimensions.screenHeight * 0.05;
 double get navLabelSize => Dimensions.screenHeight * 0.011;
 double get homePageIconSize => Dimensions.screenHeight * 0.03;
-\
+
 TextStyle get appName => TextStyle(
   color: MARYLAND_RED,
   fontWeight: FontWeight.w700,
