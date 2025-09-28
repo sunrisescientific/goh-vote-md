@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:goh_vote_md/providers/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/county_provider.dart';
+import 'providers/calendar_provider.dart';
 import 'screens/check_registration.dart';
 import 'screens/contact.dart';
 import 'screens/calendar.dart';
@@ -21,8 +24,14 @@ void main() async{
   ]);
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => CountyProvider(),
+    MultiProvider
+    (
+      providers:
+      [
+        ChangeNotifierProvider(create: (_) => CountyProvider()),
+        ChangeNotifierProvider(create: (_) => CalendarProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -70,8 +79,23 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Future.microtask(() =>
-        Provider.of<CountyProvider>(context, listen: false).loadContacts()
+        Provider.of<CountyProvider>(context, listen: false).fetchCountyData()
     );
+    Future.microtask(() =>
+        Provider.of<CalendarProvider>(context, listen: false).fetchCalendarData()
+    );
+    /*
+    Future.microtask(() =>
+        Provider.of<LocationProvider>(context, listen: false).fetchDropBoxData()
+    );
+    Future.microtask(() =>
+        Provider.of<LocationProvider>(context, listen: false).fetchEarlyData()
+    );
+    */
+    Future.microtask(() =>
+        Provider.of<LocationProvider>(context, listen: false).fetchPollingData()
+    );
+    
   }
 
   @override

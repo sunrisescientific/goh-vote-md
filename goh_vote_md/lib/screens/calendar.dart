@@ -5,21 +5,17 @@ import '../widgets/screen_header.dart';
 import '../data/constants.dart';
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:intl/intl.dart';
+import '../providers/calendar_provider.dart';
 
 class ExpandableSection extends StatefulWidget
 {
-  final String event;
-  final DateTime date;
-  final DateTime earlyStart;
-  final DateTime earlyEnd;
+  final ElectionEvent event;
 
   const ExpandableSection
   (
     {
+      super.key, 
       required this.event,
-      required this.date,
-      required this.earlyStart,
-      required this.earlyEnd,
     }
   );
 
@@ -36,7 +32,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
   {
     return Padding
     (
-      padding: const EdgeInsets.only(bottom: 12), // Space underneath box
+      padding: const EdgeInsets.only(bottom: 12),
       child: Container
       (
         width: expandableBoxSize,
@@ -86,7 +82,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                           (
                             child: Text
                             (
-                              widget.event,
+                              widget.event.name,
                               style: heading3,
                               softWrap: true,
                             ),
@@ -102,7 +98,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                       SizedBox(height: 12),
                       Text
                       (
-                        "Voting day: ${DateFormat('MMMM d, y').format(widget.date)}",
+                        "Voting day: ${DateFormat('MMMM d, y').format(widget.event.date)}",
                         style: smallDetails,
                         softWrap: true,
                       ),
@@ -133,11 +129,11 @@ class _ExpandableSectionState extends State<ExpandableSection>
                       {
                         final Event event = Event
                         (
-                          title: widget.event,
+                          title: widget.event.name,
                           description: 'Vote!',
                           location: 'Polling location',
-                          startDate: widget.date,
-                          endDate: widget.date.add(const Duration(hours: 13)),
+                          startDate: widget.event.date,
+                          endDate: widget.event.date.add(const Duration(hours: 13)),
                         );
                         Add2Calendar.addEvent2Cal(event);
                       },
@@ -161,7 +157,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                     SizedBox(height: 12),
                     Text
                     (
-                      "Early voting: ${DateFormat('MMMM d, y').format(widget.earlyStart)} to ${DateFormat('MMMM d, y').format(widget.earlyEnd)}",
+                      "Early voting: ${DateFormat('MMMM d, y').format(widget.event.earlyStart)} to ${DateFormat('MMMM d, y').format(widget.event.earlyEnd)}",
                       style: smallDetails,
                       softWrap: true,
                     ),
@@ -172,11 +168,11 @@ class _ExpandableSectionState extends State<ExpandableSection>
                       {
                         final Event event = Event
                         (
-                          title: "${widget.event} Early Voting",
+                          title: "${widget.event.name} Early Voting",
                           description: 'Vote!',
                           location: 'Polling location',
-                          startDate: widget.earlyStart,
-                          endDate: widget.earlyEnd,
+                          startDate: widget.event.earlyStart,
+                          endDate: widget.event.earlyEnd,
                           allDay: true,
                         );
                         Add2Calendar.addEvent2Cal(event);
@@ -236,34 +232,17 @@ class _ExpandableSectionState extends State<ExpandableSection>
   }
 }
 
-class ElectionEvent
-{
-  final String name;
-  final DateTime date;
-  final DateTime earlyStart;
-  final DateTime earlyEnd;
-
-  ElectionEvent
-  ({
-    required this.name,
-    required this.date,
-    required this.earlyStart,
-    required this.earlyEnd,
-  });
-}
-
 
 class Events extends StatelessWidget
 {
-  final List<ElectionEvent> events;
-  const Events
-  ({
-    required this.events,
-  });
+  const Events({super.key});
 
   @override
   Widget build(BuildContext context)
   {
+    final calendarProvider = Provider.of<CalendarProvider>(context);
+    final List<ElectionEvent> events = calendarProvider.calendarEvents;
+
     return ListView.builder
     (
       shrinkWrap: true,
@@ -271,13 +250,10 @@ class Events extends StatelessWidget
       itemCount: events.length,
       itemBuilder: (context, index)
       {
-        final event = events[index];
+        final curEvent = events[index];
         return ExpandableSection
         (
-          event: event.name,
-          date: event.date,
-          earlyStart: event.earlyStart,
-          earlyEnd: event.earlyEnd,
+          event: curEvent,
         );
       },
     );
@@ -286,31 +262,7 @@ class Events extends StatelessWidget
 
 class CalendarScreen extends StatelessWidget
 {
-  final List<ElectionEvent> electionEvents =
-  [
-    ElectionEvent
-    (
-      name: "2028 Presidential Election",
-      date: DateTime(2028, 11, 7, 7),
-      earlyStart: DateTime(2028, 10, 26),
-      earlyEnd: DateTime(2028, 11, 2),
-    ),
-    ElectionEvent
-    (
-      name: "2026 Gubernatorial General Election",
-      date: DateTime(2026, 11, 3, 7),
-      earlyStart: DateTime(2026, 10, 22),
-      earlyEnd: DateTime(2026, 10, 29),
-    ),
-    ElectionEvent
-    (
-      name: "2026 Gubernatorial Primary Election",
-      date: DateTime(2026, 6, 23, 7),
-      earlyStart: DateTime(2026, 6, 11),
-      earlyEnd: DateTime(2026, 6, 18),
-    ),
-  ];
-
+  const CalendarScreen({super.key});
 
   @override
   Widget build(BuildContext context)
@@ -351,10 +303,7 @@ class CalendarScreen extends StatelessWidget
                 ),
               ),
               SizedBox(height: 12),
-              Events
-              (
-                events: electionEvents,
-              ),
+              Events(),
             ],
           ),
         ),

@@ -1,5 +1,11 @@
+import 'dart:io' show Platform;
+import 'dart:math' show cos, sqrt, asin, pi, sin;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:geocoding/geocoding.dart';
+
 import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
@@ -13,16 +19,103 @@ class LocationsScreen extends StatefulWidget {
 
 class _LocationsScreenState extends State<LocationsScreen> {
   int _selectedTab = 0;
+  String _searchAddress = "";
+  double? _searchLat;
+  double? _searchLng;
+
+  final List<Map<String, String>> _dropBoxRaw = [
+    {"name": "Activity Center at Bohrer Park", "address": "506 South Frederick Avenue, Gaithersburg, MD 20877"},
+    {"name": "Allegany County Office Complex", "address": "701 Kelly Road, Cumberland, MD 21502"},
+    {"name": "Mountain Ridge High School", "address": "100 Dr. Nancy S. Grasmick Lane, Frostburg, MD 21532"},
+    {"name": "Crofton Library", "address": "1681 Riedel Road, Crofton, MD 21114"},
+  ];
+
+  final List<Map<String, String>> _earlyVotingRaw = [
+    {"name": "Activity Center at Bohrer Park", "address": "506 South Frederick Avenue, Gaithersburg, MD 20877"},
+    {"name": "Allegany County Office Complex", "address": "701 Kelly Road, Cumberland, MD 21502"},
+    {"name": "Mountain Ridge High School", "address": "100 Dr. Nancy S. Grasmick Lane, Frostburg, MD 21532"},
+    {"name": "Crofton Library", "address": "1681 Riedel Road, Crofton, MD 21114"},
+  ];
+
+  final List<Map<String, String>> _pollingRaw = [
+    {"name": "Sample Polling Place", "address": "123 Main Street, Baltimore, MD 21201"},
+  ];
+
+  List<Map<String, String>> _dropBox = [];
+  List<Map<String, String>> _earlyVoting = [];
+  List<Map<String, String>> _polling = [];
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _geocodeAllLocations();
+  }
+
+  Future<void> _geocodeAllLocations() async {
+    Future<List<Map<String, String>>> enrich(List<Map<String, String>> raw) async {
+      List<Map<String, String>> enriched = [];
+      for (final loc in raw) {
+        try {
+          final results = await locationFromAddress(loc["address"]!);
+          if (results.isNotEmpty) {
+            enriched.add({
+              ...loc,
+              "lat": results.first.latitude.toString(),
+              "lng": results.first.longitude.toString(),
+            });
+          } else {
+            enriched.add(loc); 
+          }
+        } catch (e) {
+          debugPrint("Geocoding failed for ${loc["address"]}: $e");
+          enriched.add(loc);
+        }
+      }
+      return enriched;
+    }
+
+    final drop = await enrich(_dropBoxRaw);
+    final early = await enrich(_earlyVotingRaw);
+    final poll = await enrich(_pollingRaw);
+
+    if (mounted) {
+      setState(() {
+        _dropBox = drop;
+        _earlyVoting = early;
+        _polling = poll;
+      });
+    }
+  }
+
+  Future<void> _updateSearch(String query) async {
+    setState(() => _searchAddress = query);
+
+    if (query.isNotEmpty) {
+      try {
+        final results = await locationFromAddress(query);
+        if (results.isNotEmpty) {
+          setState(() {
+            _searchLat = results.first.latitude;
+            _searchLng = results.first.longitude;
+          });
+        }
+      } catch (e) {
+        debugPrint("Geocoding failed: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
+    final screenWidth = Dimensions.screenWidth;
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: Dimensions.screenWidth * 0.06),
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -33,9 +126,15 @@ class _LocationsScreenState extends State<LocationsScreen> {
               ),
 
               TextField(
+                controller: _searchController,
                 decoration: InputDecoration(
                   hintText: "Type address here",
-                  suffixIcon: const Icon(Icons.search, color: MARYLAND_YELLOW),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search, color: MARYLAND_YELLOW),
+                    onPressed: () {
+                      _updateSearch(_searchController.text);
+                    },
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
                     borderRadius: BorderRadius.circular(roundedCorners),
@@ -45,6 +144,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                     borderRadius: BorderRadius.circular(roundedCorners),
                   ),
                 ),
+                onSubmitted: _updateSearch,
               ),
               const SizedBox(height: 16),
 
@@ -82,14 +182,29 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
               const SizedBox(height: 16),
 
-              IndexedStack(
-                index: _selectedTab,
-                children: const [
-                  DropBoxLocationsList(),
-                  EarlyVotingLocationsList(),
-                  PollingPlace(),
-                ],
-              ),
+              if (_dropBox.isEmpty || _earlyVoting.isEmpty || _polling.isEmpty)
+                const CircularProgressIndicator()
+              else
+                IndexedStack(
+                  index: _selectedTab,
+                  children: [
+                    DropBoxLocationsList(
+                      locations: _dropBox,
+                      searchLat: _searchLat,
+                      searchLng: _searchLng,
+                    ),
+                    EarlyVotingLocationsList(
+                      locations: _earlyVoting,
+                      searchLat: _searchLat,
+                      searchLng: _searchLng,
+                    ),
+                    PollingPlace(
+                      locations: _polling,
+                      searchLat: _searchLat,
+                      searchLng: _searchLng,
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
@@ -148,6 +263,23 @@ class LocationList extends StatelessWidget {
     this.showMore = false,
   });
 
+  Future<void> _openMaps(String address) async {
+    final query = Uri.encodeComponent(address);
+
+    final Uri appleUrl = Uri.parse("http://maps.apple.com/?q=$query");
+    final Uri googleUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=$query");
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(appleUrl, mode: LaunchMode.externalApplication);
+      } else {
+        await launchUrl(googleUrl, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      debugPrint("Error opening maps: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -155,7 +287,13 @@ class LocationList extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: MARYLAND_RED, width: 3),
-        boxShadow: [yellowBoxShadow],
+        boxShadow: const [
+          BoxShadow(
+            color: MARYLAND_YELLOW,
+            offset: Offset(4, 4),
+            blurRadius: 0,
+          ),
+        ],
         borderRadius: const BorderRadius.all(Radius.circular(0)),
       ),
       child: ListView.separated(
@@ -181,6 +319,7 @@ class LocationList extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
+                    _openMaps(loc["address"]!);
                   },
                   child: CircleAvatar(
                     radius: 19,
@@ -188,8 +327,13 @@ class LocationList extends StatelessWidget {
                     child: const Icon(Icons.map, color: Colors.white, size: 20),
                   ),
                 ),
-                Text(
+                const Text(
                   "Directions",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -200,55 +344,119 @@ class LocationList extends StatelessWidget {
   }
 }
 
-//
-// Individual tab widgets
-//
+double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+  const earthRadius = 6371; 
+  final dLat = (lat2 - lat1) * (pi / 180);
+  final dLon = (lon2 - lon1) * (pi / 180);
+
+  final a = sin(dLat / 2) * sin(dLat / 2) +
+      cos(lat1 * (pi / 180)) *
+          cos(lat2 * (pi / 180)) *
+          sin(dLon / 2) *
+          sin(dLon / 2);
+  final c = 2 * asin(sqrt(a));
+
+  return earthRadius * c;
+}
+
 class DropBoxLocationsList extends StatelessWidget {
-  const DropBoxLocationsList({super.key});
+  final List<Map<String, String>> locations;
+  final double? searchLat;
+  final double? searchLng;
+
+  const DropBoxLocationsList({
+    super.key,
+    required this.locations,
+    this.searchLat,
+    this.searchLng,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final locations = [
-      {
-        "name": "Activity Center at Bohrer Park",
-        "address": "506 South Frederick Avenue\nGaithersburg, MD 20877"
-      },
-      {"name": "Name", "address": "Address line 1\nCity, State Zip code"},
-      {"name": "Name", "address": "Address line 1\nCity, State Zip code"},
-      {"name": "Name", "address": "Address line 1\nCity, State Zip code"},
-    ];
+    final sorted = [...locations];
 
-    return LocationList(locations: locations, showMore: false);
+    if (searchLat != null && searchLng != null) {
+      sorted.sort((a, b) {
+        final d1 = calculateDistance(
+          searchLat!, searchLng!,
+          double.parse(a["lat"]!), double.parse(a["lng"]!),
+        );
+        final d2 = calculateDistance(
+          searchLat!, searchLng!,
+          double.parse(b["lat"]!), double.parse(b["lng"]!),
+        );
+        return d1.compareTo(d2);
+      });
+    }
+
+    return LocationList(locations: sorted, showMore: false);
   }
 }
 
 class EarlyVotingLocationsList extends StatelessWidget {
-  const EarlyVotingLocationsList({super.key});
+  final List<Map<String, String>> locations;
+  final double? searchLat;
+  final double? searchLng;
+
+  const EarlyVotingLocationsList({
+    super.key,
+    required this.locations,
+    this.searchLat,
+    this.searchLng,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final locations = [
-      {"name": "Name", "address": "Address line 1\nCity, State Zip code"},
-      {"name": "Name", "address": "Address line 1\nCity, State Zip code"},
-      {"name": "Name", "address": "Address line 1\nCity, State Zip code"},
-    ];
+    final sorted = [...locations];
 
-    return LocationList(locations: locations, showMore: false);
+    if (searchLat != null && searchLng != null) {
+      sorted.sort((a, b) {
+        final d1 = calculateDistance(
+          searchLat!, searchLng!,
+          double.parse(a["lat"]!), double.parse(a["lng"]!),
+        );
+        final d2 = calculateDistance(
+          searchLat!, searchLng!,
+          double.parse(b["lat"]!), double.parse(b["lng"]!),
+        );
+        return d1.compareTo(d2);
+      });
+    }
+
+    return LocationList(locations: sorted, showMore: false);
   }
 }
 
 class PollingPlace extends StatelessWidget {
-  const PollingPlace({super.key});
+  final List<Map<String, String>> locations;
+  final double? searchLat;
+  final double? searchLng;
+
+  const PollingPlace({
+    super.key,
+    required this.locations,
+    this.searchLat,
+    this.searchLng,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final locations = [
-      {
-        "name": "Sample Polling Place",
-        "address": "123 Main Street\nCity, State Zip code"
-      },
-    ];
+    final sorted = [...locations];
 
-    return LocationList(locations: locations, showMore: false);
+    if (searchLat != null && searchLng != null) {
+      sorted.sort((a, b) {
+        final d1 = calculateDistance(
+          searchLat!, searchLng!,
+          double.parse(a["lat"]!), double.parse(a["lng"]!),
+        );
+        final d2 = calculateDistance(
+          searchLat!, searchLng!,
+          double.parse(b["lat"]!), double.parse(b["lng"]!),
+        );
+        return d1.compareTo(d2);
+      });
+    }
+
+    return LocationList(locations: sorted, showMore: false);
   }
 }
