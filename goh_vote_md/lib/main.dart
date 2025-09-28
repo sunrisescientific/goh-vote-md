@@ -8,6 +8,7 @@ import 'screens/calendar.dart';
 import 'screens/faqs.dart';
 import 'screens/helpful_links.dart';
 import 'screens/locations.dart';
+import 'screens/dis-misinformation.dart';
 import 'widgets/county_dropdown.dart';
 import 'widgets/nav_bar.dart';
 import 'data/constants.dart';
@@ -53,10 +54,10 @@ class _HomePageState extends State<HomePage> {
     HomeScreen(),
     RegistrationScreen(),
     CalendarScreen(),
-    FAQScreen(),
+    Dis_MisinformationScreen(),
     ContactScreen(),
     HelpfulLinksScreen(),
-    LocationsScreen()
+    LocationsScreen(),
   ];
 
   void onItemTapped(int index) {
@@ -73,6 +74,27 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: _selectedIndex,
         onItemTapped: onItemTapped,
       ),
+
+      floatingActionButton: Opacity(
+        opacity: 0.8,
+        child: SizedBox(
+          width: 55, 
+          height: 55,
+          child: FloatingActionButton(
+            backgroundColor: MARYLAND_YELLOW,
+            child: const Icon(Icons.question_mark, size: 22, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FAQScreen()),
+              );
+            },
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+
+
     );
   }
 }
@@ -154,7 +176,7 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
 
-                    SizedBox(height: screenHeight * 0.05),
+                    SizedBox(height: screenHeight * 0.03),
 
                     LayoutBuilder(
                       builder: (context, constraints) {
@@ -182,8 +204,8 @@ class HomeScreen extends StatelessWidget {
                                   onPressed: () => homeState?.onItemTapped(2),
                                 ),
                                 ElectionButton(
-                                  icon: Icons.list,
-                                  label: "FAQs",
+                                  icon: Icons.campaign,
+                                  label: "Dis/Mis-\nInformation",
                                   width: buttonWidth,
                                   onPressed: () => homeState?.onItemTapped(3),
                                 ),
@@ -212,7 +234,7 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
 
-                    SizedBox(height: screenHeight * 0.02),
+                    SizedBox(height: screenHeight * 0.12),
                   ],
                 ),
               ),
