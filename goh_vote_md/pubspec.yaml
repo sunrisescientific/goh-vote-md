@@ -21,6 +21,8 @@ dependencies:
   shared_preferences: ^2.5.3
   csv: ^6.0.0
   youtube_player_flutter: ^9.1.2
+  add_2_calendar: ^3.0.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

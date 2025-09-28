@@ -42,6 +42,7 @@ MERGED from /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/a
 INJECTED from /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+MERGED from [:add_2_calendar] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/add_2_calendar/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:shared_preferences_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/shared_preferences_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:webview_flutter_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/webview_flutter_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:geolocator_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/geolocator_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-15:12
@@ -142,6 +143,8 @@ uses-sdk
 INJECTED from /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/android/app/src/debug/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/android/app/src/debug/AndroidManifest.xml
 INJECTED from /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/android/app/src/debug/AndroidManifest.xml
+MERGED from [:add_2_calendar] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/add_2_calendar/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:add_2_calendar] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/add_2_calendar/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/shared_preferences_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/shared_preferences_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:webview_flutter_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/webview_flutter_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
