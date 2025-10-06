@@ -84,14 +84,12 @@ class _HomePageState extends State<HomePage> {
     Future.microtask(() =>
         Provider.of<CalendarProvider>(context, listen: false).fetchCalendarData()
     );
-    /*
     Future.microtask(() =>
         Provider.of<LocationProvider>(context, listen: false).fetchDropBoxData()
     );
     Future.microtask(() =>
         Provider.of<LocationProvider>(context, listen: false).fetchEarlyData()
     );
-    */
     Future.microtask(() =>
         Provider.of<LocationProvider>(context, listen: false).fetchPollingData()
     );

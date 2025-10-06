@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:geocoding/geocoding.dart';
 
 import '../providers/county_provider.dart';
+import '../providers/location_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
 
@@ -23,6 +24,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
   double? _searchLat;
   double? _searchLng;
 
+  /*
   final List<Map<String, String>> _dropBoxRaw = [
     {"name": "Activity Center at Bohrer Park", "address": "506 South Frederick Avenue, Gaithersburg, MD 20877"},
     {"name": "Allegany County Office Complex", "address": "701 Kelly Road, Cumberland, MD 21502"},
@@ -40,18 +42,22 @@ class _LocationsScreenState extends State<LocationsScreen> {
   final List<Map<String, String>> _pollingRaw = [
     {"name": "Sample Polling Place", "address": "123 Main Street, Baltimore, MD 21201"},
   ];
+  */
 
+  /*
   List<Map<String, String>> _dropBox = [];
   List<Map<String, String>> _earlyVoting = [];
   List<Map<String, String>> _polling = [];
+  */
   TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _geocodeAllLocations();
+    //_geocodeAllLocations();
   }
 
+  /*
   Future<void> _geocodeAllLocations() async {
     Future<List<Map<String, String>>> enrich(List<Map<String, String>> raw) async {
       List<Map<String, String>> enriched = [];
@@ -87,6 +93,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
       });
     }
   }
+  */
 
   Future<void> _updateSearch(String query) async {
     setState(() => _searchAddress = query);
@@ -108,6 +115,11 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locationProvider = Provider.of<LocationProvider>(context);
+    final dropBox = locationProvider.dropboxLocations;
+    final earlyVoting = locationProvider.earlyLocations;
+    final polling = locationProvider.pollingLocations;
+
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
     final screenWidth = Dimensions.screenWidth;
@@ -182,24 +194,24 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
               const SizedBox(height: 16),
 
-              if (_dropBox.isEmpty || _earlyVoting.isEmpty || _polling.isEmpty)
+              if (dropBox.isEmpty || earlyVoting.isEmpty || polling.isEmpty)
                 const CircularProgressIndicator()
               else
                 IndexedStack(
                   index: _selectedTab,
                   children: [
                     DropBoxLocationsList(
-                      locations: _dropBox,
+                      locations: dropBox.where((loc) => loc['county'] == selectedCounty).toList(),
                       searchLat: _searchLat,
                       searchLng: _searchLng,
                     ),
                     EarlyVotingLocationsList(
-                      locations: _earlyVoting,
+                      locations: earlyVoting.where((loc) => loc['county'] == selectedCounty).toList(),
                       searchLat: _searchLat,
                       searchLng: _searchLng,
                     ),
                     PollingPlace(
-                      locations: _polling,
+                      locations: polling,
                       searchLat: _searchLat,
                       searchLng: _searchLng,
                     ),
