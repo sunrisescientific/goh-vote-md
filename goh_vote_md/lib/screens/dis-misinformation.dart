@@ -69,6 +69,21 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
     }
   }
 
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter your email';
+    final emailRegex = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    if (!emailRegex.hasMatch(value)) return 'Please enter a valid email';
+    return null;
+  }
+
+  String? _validatePhone(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter your phone number';
+    final digitsOnly = value.replaceAll(RegExp(r'\D'), '');
+    if (digitsOnly.length != 10) return 'Enter a valid phone number (10 digits)';
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
@@ -152,8 +167,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                               decoration: _inputDecoration('Email *').copyWith(
                                 prefixIcon: const Icon(Icons.email_outlined),
                               ),
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please enter your email' : null,
+                              validator: _validateEmail,
                             ),
                             const SizedBox(height: 15),
 
@@ -163,9 +177,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                               decoration: _inputDecoration('Phone *').copyWith(
                                 prefixIcon: const Icon(Icons.phone_outlined),
                               ),
-                              validator: (value) => value!.isEmpty
-                                  ? 'Please enter your phone number'
-                                  : null,
+                              validator: _validatePhone,
                             ),
                             const SizedBox(height: 15),
 
