@@ -194,8 +194,12 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
               const SizedBox(height: 16),
 
-              if (dropBox.isEmpty || earlyVoting.isEmpty || polling.isEmpty)
-                const CircularProgressIndicator()
+              //if (dropBox.isEmpty || earlyVoting.isEmpty || polling.isEmpty)
+                //const CircularProgressIndicator()
+              if (locationProvider.isLoading)
+                const Center(child: CircularProgressIndicator())
+              else if (dropBox.isEmpty && earlyVoting.isEmpty && polling.isEmpty)
+                const Center(child: Text("No locations found"))
               else
                 IndexedStack(
                   index: _selectedTab,

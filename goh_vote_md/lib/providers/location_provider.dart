@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import 'package:csv/csv.dart';
 
 class LocationProvider with ChangeNotifier
@@ -8,22 +8,31 @@ class LocationProvider with ChangeNotifier
   List<Map<String, String>> earlyLocations = [];
   List<Map<String, String>> pollingLocations = [];
 
-  LocationProvider()
+  bool isLoading = false;
+
+  Future<void> initialize() async
   {
-    fetchDropBoxData();
-    fetchEarlyData();
-    fetchPollingData();
+    isLoading = true;
+    notifyListeners();
+
+    await Future.wait
+    ([
+      fetchDropBoxData(),
+      fetchEarlyData(),
+      fetchPollingData(),
+    ]);
+
+    isLoading = false;
+    notifyListeners();
   }
 
-  Future<List<Map<String, String>>> fetch(String url) async
+  Future<List<Map<String, String>>> fetch(String csvFile) async
   {
     try
     {
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200)
-      {
-        final csvTable = const CsvToListConverter().convert(response.body);
+        final String csvData = await rootBundle.loadString(csvFile);
+        final cleaned = csvData.replaceAll('\r', '').replaceAll('\uFEFF', '');
+        final csvTable = const CsvToListConverter(eol: '\n').convert(cleaned);
         final rows = csvTable.skip(1);
 
         final List<Map<String, String>> loadedLocations = [];
@@ -43,15 +52,10 @@ class LocationProvider with ChangeNotifier
         }
 
         return loadedLocations;
-      }
-      else
-      {
-        print("Failed to fetch CSV from $url, status: ${response.statusCode}");
-      }
     }
     catch (e)
     {
-      print("Error fetching data from $url: $e");
+      print("Error fetching data from $csvFile: $e");
     }
 
     return [];
@@ -59,28 +63,19 @@ class LocationProvider with ChangeNotifier
 
   Future<void> fetchDropBoxData() async
   {
-    dropboxLocations = await fetch
-    (
-      "https://docs.google.com/spreadsheets/d/1POThZzWf2AmqmtxBqVz5VPOc1eZb5TP-vKj2adXb0ag/export?format=csv&gid=1672957303",
-    );
+    dropboxLocations = await fetch("assets/dropbox.csv");
     notifyListeners();
   }
 
   Future<void> fetchEarlyData() async
   {
-    earlyLocations = await fetch
-    (
-      "https://docs.google.com/spreadsheets/d/1POThZzWf2AmqmtxBqVz5VPOc1eZb5TP-vKj2adXb0ag/export?format=csv&gid=439321169",
-    );
+    earlyLocations = await fetch("assets/early.csv");
     notifyListeners();
   }
 
   Future<void> fetchPollingData() async
   {
-    pollingLocations = await fetch
-    (
-      "https://docs.google.com/spreadsheets/d/1POThZzWf2AmqmtxBqVz5VPOc1eZb5TP-vKj2adXb0ag/export?format=csv&gid=458374181",
-    );
+    pollingLocations = await fetch("assets/polling.csv");
     notifyListeners();
   }
 }

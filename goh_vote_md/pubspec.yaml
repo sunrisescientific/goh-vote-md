@@ -37,6 +37,9 @@ flutter:
     - assets/top_maryland.png
     - assets/icon.png
     - assets/counties.tsv
+    - assets/dropbox.csv
+    - assets/early.csv
+    - assets/polling.csv
 
 flutter_icons:
   android: true

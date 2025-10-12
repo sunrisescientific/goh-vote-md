@@ -78,22 +78,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<CountyProvider>(context, listen: false).fetchCountyData()
-    );
-    Future.microtask(() =>
-        Provider.of<CalendarProvider>(context, listen: false).fetchCalendarData()
-    );
-    Future.microtask(() =>
-        Provider.of<LocationProvider>(context, listen: false).fetchDropBoxData()
-    );
-    Future.microtask(() =>
-        Provider.of<LocationProvider>(context, listen: false).fetchEarlyData()
-    );
-    Future.microtask(() =>
-        Provider.of<LocationProvider>(context, listen: false).fetchPollingData()
-    );
-    
+    Future.microtask(()
+    {
+      final county = Provider.of<CountyProvider>(context, listen: false);
+      final calendar = Provider.of<CalendarProvider>(context, listen: false);
+      final locations = Provider.of<LocationProvider>(context, listen: false);
+
+      county.fetchCountyData();
+      calendar.fetchCalendarData();
+      locations.initialize();
+    });
   }
 
   @override
