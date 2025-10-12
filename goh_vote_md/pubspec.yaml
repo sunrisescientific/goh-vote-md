@@ -18,11 +18,14 @@ dependencies:
   webview_flutter: ^4.13.0
   geocoding: ^4.0.0
   geolocator: ^14.0.2
-  shared_preferences: ^2.5.3
-  csv: ^6.0.0
-  youtube_player_flutter: ^9.1.2
   add_2_calendar: ^3.0.1
   intl: ^0.20.2
+  http: ^1.5.0
+  csv: ^6.0.0
+  shared_preferences: ^2.5.3
+  youtube_player_flutter: ^9.1.2
+  file_picker: ^10.3.3
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +39,10 @@ flutter:
     - assets/title_logo.png
     - assets/top_maryland.png
     - assets/icon.png
+    - assets/counties.tsv
+    - assets/dropbox.csv
+    - assets/early.csv
+    - assets/polling.csv
 
 flutter_icons:
   android: true

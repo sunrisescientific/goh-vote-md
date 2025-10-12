@@ -1,4 +1,4 @@
-#Sat Oct 11 21:27:34 EDT 2025
+#Sun Oct 12 14:22:14 EDT 2025
 base.0=/Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/app/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/app/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
 base.2=/Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/app/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex

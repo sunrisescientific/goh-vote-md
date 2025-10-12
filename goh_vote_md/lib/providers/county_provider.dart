@@ -32,7 +32,7 @@ class CountyProvider with ChangeNotifier {
 
   CountyProvider() {
     _loadCounty();
-    _fetchCountyData();
+    fetchCountyData();
   }
 
   Future<void> _loadCounty() async {
@@ -53,7 +53,7 @@ class CountyProvider with ChangeNotifier {
     await prefs.setString(_countyKey, county);
   }
 
-  Future<void> _fetchCountyData() async {
+  Future<void> fetchCountyData() async {
     try {
       final url = Uri.parse(
         sheetsURLStart + gid + sheetsURLEnd,

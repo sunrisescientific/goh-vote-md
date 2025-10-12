@@ -21,7 +21,7 @@ class NavBar extends StatelessWidget {
           (states) {
             if (states.contains(WidgetState.selected)) {
               return IconThemeData(
-                color: Colors.white,
+                color: SELECTED,
                 size: navIconSize,
               );
             }

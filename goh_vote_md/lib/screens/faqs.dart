@@ -30,23 +30,15 @@ class _ExpandableSectionState extends State<ExpandableSection>
   {
     return Padding
     (
-      padding: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 14),
       child: Container
       (
+        width: expandableBoxSize,
         decoration: BoxDecoration
         (
           color: Colors.white,
           border: Border.all(color: MARYLAND_YELLOW, width: 1.5),
-          boxShadow:
-          [
-            BoxShadow
-            (
-              color: Color.fromARGB(255, 196, 196, 196),
-              spreadRadius: 0.5,
-              blurRadius: 2,
-              offset: Offset(2.5, 2.5),
-            ),
-          ],
+          boxShadow: [greyBoxShadow]
         ),
         child: Column
         (
@@ -63,7 +55,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
               },
               style: TextButton.styleFrom
               (
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
@@ -80,13 +72,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                       child: Text
                       (
                         widget.title,
-                        style: TextStyle
-                        (
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w400
-                        ),
+                        style: heading3,
                         softWrap: true,
                       ),
                     ),
@@ -119,7 +105,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
               firstChild: Padding
               (
                 padding: const EdgeInsets.only(left: 16.0, bottom: 8),
-                child: Text(widget.content),
+                child: Text(widget.content, style: smallDetails),
               ),
               secondChild: const SizedBox.shrink(),
             ),
@@ -154,22 +140,7 @@ class FAQCategory extends StatelessWidget
         Text
         (
           title,
-          style: const TextStyle
-          (
-            color: MARYLAND_RED,
-            fontFamily: 'Inter',
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            shadows:
-            [
-              Shadow
-              (
-                offset: Offset(2, 2),
-                blurRadius: 8,
-                color: Color.fromARGB(255, 205, 204, 204),
-              ),
-            ],
-          ),
+          style: heading2
         ),
         SizedBox(height: 12),
         Column
@@ -280,14 +251,12 @@ class FAQScreen extends StatelessWidget
   {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
-    final screenHeight = Dimensions.screenHeight;
-    final screenWidth =  Dimensions.screenWidth;
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
         // padding: const EdgeInsets.only(left: 24, right: 24),
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+        padding: EdgeInsets.symmetric(horizontal: Dimensions.screenWidth * 0.06),
         child: Column
         (
           crossAxisAlignment: CrossAxisAlignment.center,

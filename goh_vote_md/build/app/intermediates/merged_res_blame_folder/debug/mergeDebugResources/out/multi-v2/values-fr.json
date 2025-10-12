@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-48:/values-fr/values-fr.xml",
+            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-49:/values-fr/values-fr.xml",
             "map": [
                 {
                     "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/308a2e77faa557d0bd706972416bde6a/transformed/browser-1.8.0/res/values-fr/values-fr.xml",

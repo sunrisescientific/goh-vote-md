@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../providers/county_provider.dart';
+import '../providers/location_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
 
@@ -22,75 +24,10 @@ class _LocationsScreenState extends State<LocationsScreen> {
   String _searchAddress = "";
   double? _searchLat;
   double? _searchLng;
-
-  final List<Map<String, String>> _dropBoxRaw = [
-    {"name": "Activity Center at Bohrer Park", "address": "506 South Frederick Avenue, Gaithersburg, MD 20877"},
-    {"name": "Allegany County Office Complex", "address": "701 Kelly Road, Cumberland, MD 21502"},
-    {"name": "Mountain Ridge High School", "address": "100 Dr. Nancy S. Grasmick Lane, Frostburg, MD 21532"},
-    {"name": "Crofton Library", "address": "1681 Riedel Road, Crofton, MD 21114"},
-  ];
-
-  final List<Map<String, String>> _earlyVotingRaw = [
-    {"name": "Activity Center at Bohrer Park", "address": "506 South Frederick Avenue, Gaithersburg, MD 20877"},
-    {"name": "Allegany County Office Complex", "address": "701 Kelly Road, Cumberland, MD 21502"},
-    {"name": "Mountain Ridge High School", "address": "100 Dr. Nancy S. Grasmick Lane, Frostburg, MD 21532"},
-    {"name": "Crofton Library", "address": "1681 Riedel Road, Crofton, MD 21114"},
-  ];
-
-  final List<Map<String, String>> _pollingRaw = [
-    {"name": "Sample Polling Place", "address": "123 Main Street, Baltimore, MD 21201"},
-  ];
-
-  List<Map<String, String>> _dropBox = [];
-  List<Map<String, String>> _earlyVoting = [];
-  List<Map<String, String>> _polling = [];
-  TextEditingController _searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _geocodeAllLocations();
-  }
-
-  Future<void> _geocodeAllLocations() async {
-    Future<List<Map<String, String>>> enrich(List<Map<String, String>> raw) async {
-      List<Map<String, String>> enriched = [];
-      for (final loc in raw) {
-        try {
-          final results = await locationFromAddress(loc["address"]!);
-          if (results.isNotEmpty) {
-            enriched.add({
-              ...loc,
-              "lat": results.first.latitude.toString(),
-              "lng": results.first.longitude.toString(),
-            });
-          } else {
-            enriched.add(loc);
-          }
-        } catch (e) {
-          debugPrint("Geocoding failed for ${loc["address"]}: $e");
-          enriched.add(loc);
-        }
-      }
-      return enriched;
-    }
-
-    final drop = await enrich(_dropBoxRaw);
-    final early = await enrich(_earlyVotingRaw);
-    final poll = await enrich(_pollingRaw);
-
-    if (mounted) {
-      setState(() {
-        _dropBox = drop;
-        _earlyVoting = early;
-        _polling = poll;
-      });
-    }
-  }
+  final TextEditingController _searchController = TextEditingController();
 
   Future<void> _updateSearch(String query) async {
     setState(() => _searchAddress = query);
-
     if (query.isNotEmpty) {
       try {
         final results = await locationFromAddress(query);
@@ -108,13 +45,17 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locationProvider = Provider.of<LocationProvider>(context);
+    final dropBox = locationProvider.dropboxLocations;
+    final earlyVoting = locationProvider.earlyLocations;
+    final polling = locationProvider.pollingLocations;
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
     final screenWidth = Dimensions.screenWidth;
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -125,7 +66,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                 title: "Voting Locations",
               ),
 
-              // === TAB BUTTONS ===
+              // 🔹 Tab Bar
               Row(
                 children: [
                   Expanded(
@@ -134,7 +75,6 @@ class _LocationsScreenState extends State<LocationsScreen> {
                       isSelected: _selectedTab == 0,
                       onTap: () => setState(() => _selectedTab = 0),
                       isFirst: true,
-                      isLast: false,
                     ),
                   ),
                   Expanded(
@@ -142,8 +82,6 @@ class _LocationsScreenState extends State<LocationsScreen> {
                       text: "Drop Box",
                       isSelected: _selectedTab == 1,
                       onTap: () => setState(() => _selectedTab = 1),
-                      isFirst: false,
-                      isLast: false,
                     ),
                   ),
                   Expanded(
@@ -151,7 +89,6 @@ class _LocationsScreenState extends State<LocationsScreen> {
                       text: "Early Voting",
                       isSelected: _selectedTab == 2,
                       onTap: () => setState(() => _selectedTab = 2),
-                      isFirst: false,
                       isLast: true,
                     ),
                   ),
@@ -160,6 +97,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
               const SizedBox(height: 16),
 
+              // 🔹 Search Bar (Drop Box & Early Voting only)
               if (_selectedTab == 1 || _selectedTab == 2)
                 Column(
                   children: [
@@ -168,17 +106,25 @@ class _LocationsScreenState extends State<LocationsScreen> {
                       decoration: InputDecoration(
                         hintText: "Type address here",
                         suffixIcon: IconButton(
-                          icon: const Icon(Icons.search, color: MARYLAND_YELLOW),
-                          onPressed: () {
-                            _updateSearch(_searchController.text);
-                          },
+                          icon: const Icon(
+                            Icons.search,
+                            color: MARYLAND_YELLOW,
+                          ),
+                          onPressed:
+                              () => _updateSearch(_searchController.text),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
+                          borderSide: const BorderSide(
+                            color: MARYLAND_RED,
+                            width: 3,
+                          ),
                           borderRadius: BorderRadius.circular(roundedCorners),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
+                          borderSide: const BorderSide(
+                            color: MARYLAND_RED,
+                            width: 3,
+                          ),
                           borderRadius: BorderRadius.circular(roundedCorners),
                         ),
                       ),
@@ -188,28 +134,40 @@ class _LocationsScreenState extends State<LocationsScreen> {
                   ],
                 ),
 
-              if (_dropBox.isEmpty || _earlyVoting.isEmpty || _polling.isEmpty)
-                const CircularProgressIndicator()
+              // 🔹 Main Content
+              if (locationProvider.isLoading)
+                const Center(child: CircularProgressIndicator())
+              else if (dropBox.isEmpty &&
+                  earlyVoting.isEmpty &&
+                  polling.isEmpty)
+                const Center(child: Text("No locations found"))
               else
-                IndexedStack(
-                  index: _selectedTab,
-                  children: [
-                    PollingPlace(
-                      locations: _polling,
-                      searchLat: _searchLat,
-                      searchLng: _searchLng,
-                    ),
-                    DropBoxLocationsList(
-                      locations: _dropBox,
-                      searchLat: _searchLat,
-                      searchLng: _searchLng,
-                    ),
-                    EarlyVotingLocationsList(
-                      locations: _earlyVoting,
-                      searchLat: _searchLat,
-                      searchLng: _searchLng,
-                    ),
-                  ],
+                Expanded(
+                  child: IndexedStack(
+                    index: _selectedTab,
+                    children: [
+                      // Polling Place WebView
+                      const PollingPlace(),
+
+                      // Drop Box List
+                      DropBoxLocationsList(
+                        locations: dropBox
+                            .where((loc) => loc['county'] == selectedCounty)
+                            .toList(),
+                        searchLat: _searchLat,
+                        searchLng: _searchLng,
+                      ),
+
+                      // Early Voting List
+                      EarlyVotingLocationsList(
+                        locations: earlyVoting
+                            .where((loc) => loc['county'] == selectedCounty)
+                            .toList(),
+                        searchLat: _searchLat,
+                        searchLng: _searchLng,
+                      ),
+                    ],
+                  ),
                 ),
             ],
           ),
@@ -249,10 +207,7 @@ class _TabButton extends StatelessWidget {
           ),
         ),
         child: Center(
-          child: Text(
-            text,
-            style: isSelected ? heading3Selected : heading3,
-          ),
+          child: Text(text, style: isSelected ? heading3Selected : heading3),
         ),
       ),
     );
@@ -271,9 +226,10 @@ class LocationList extends StatelessWidget {
 
   Future<void> _openMaps(String address) async {
     final query = Uri.encodeComponent(address);
-
     final Uri appleUrl = Uri.parse("http://maps.apple.com/?q=$query");
-    final Uri googleUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=$query");
+    final Uri googleUrl = Uri.parse(
+      "https://www.google.com/maps/search/?api=1&query=$query",
+    );
 
     try {
       if (Platform.isIOS) {
@@ -300,7 +256,6 @@ class LocationList extends StatelessWidget {
             blurRadius: 0,
           ),
         ],
-        borderRadius: const BorderRadius.all(Radius.circular(0)),
       ),
       child: ListView.separated(
         shrinkWrap: true,
@@ -310,10 +265,7 @@ class LocationList extends StatelessWidget {
         separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
           if (showMore && index == locations.length) {
-            return TextButton(
-              onPressed: () {},
-              child: const Text(""),
-            );
+            return const SizedBox.shrink();
           }
 
           final loc = locations[index];
@@ -324,9 +276,7 @@ class LocationList extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    _openMaps(loc["address"]!);
-                  },
+                  onTap: () => _openMaps(loc["address"]!),
                   child: CircleAvatar(
                     radius: 19,
                     backgroundColor: MARYLAND_RED,
@@ -350,21 +300,22 @@ class LocationList extends StatelessWidget {
   }
 }
 
+// 🌍 Distance Calculation
 double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   const earthRadius = 6371;
   final dLat = (lat2 - lat1) * (pi / 180);
   final dLon = (lon2 - lon1) * (pi / 180);
-
-  final a = sin(dLat / 2) * sin(dLat / 2) +
+  final a =
+      sin(dLat / 2) * sin(dLat / 2) +
       cos(lat1 * (pi / 180)) *
           cos(lat2 * (pi / 180)) *
           sin(dLon / 2) *
           sin(dLon / 2);
   final c = 2 * asin(sqrt(a));
-
   return earthRadius * c;
 }
 
+// 🗳️ Drop Box List
 class DropBoxLocationsList extends StatelessWidget {
   final List<Map<String, String>> locations;
   final double? searchLat;
@@ -380,25 +331,28 @@ class DropBoxLocationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sorted = [...locations];
-
     if (searchLat != null && searchLng != null) {
       sorted.sort((a, b) {
         final d1 = calculateDistance(
-          searchLat!, searchLng!,
-          double.parse(a["lat"]!), double.parse(a["lng"]!),
+          searchLat!,
+          searchLng!,
+          double.parse(a["lat"]!),
+          double.parse(a["lng"]!),
         );
         final d2 = calculateDistance(
-          searchLat!, searchLng!,
-          double.parse(b["lat"]!), double.parse(b["lng"]!),
+          searchLat!,
+          searchLng!,
+          double.parse(b["lat"]!),
+          double.parse(b["lng"]!),
         );
         return d1.compareTo(d2);
       });
     }
-
-    return LocationList(locations: sorted, showMore: false);
+    return LocationList(locations: sorted);
   }
 }
 
+// 🗳️ Early Voting List
 class EarlyVotingLocationsList extends StatelessWidget {
   final List<Map<String, String>> locations;
   final double? searchLat;
@@ -414,55 +368,98 @@ class EarlyVotingLocationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sorted = [...locations];
-
     if (searchLat != null && searchLng != null) {
       sorted.sort((a, b) {
         final d1 = calculateDistance(
-          searchLat!, searchLng!,
-          double.parse(a["lat"]!), double.parse(a["lng"]!),
+          searchLat!,
+          searchLng!,
+          double.parse(a["lat"]!),
+          double.parse(a["lng"]!),
         );
         final d2 = calculateDistance(
-          searchLat!, searchLng!,
-          double.parse(b["lat"]!), double.parse(b["lng"]!),
+          searchLat!,
+          searchLng!,
+          double.parse(b["lat"]!),
+          double.parse(b["lng"]!),
         );
         return d1.compareTo(d2);
       });
     }
-
-    return LocationList(locations: sorted, showMore: false);
+    return LocationList(locations: sorted);
   }
 }
 
-class PollingPlace extends StatelessWidget {
-  final List<Map<String, String>> locations;
-  final double? searchLat;
-  final double? searchLng;
+class PollingPlace extends StatefulWidget {
+  const PollingPlace({super.key});
 
-  const PollingPlace({
-    super.key,
-    required this.locations,
-    this.searchLat,
-    this.searchLng,
-  });
+  @override
+  State<PollingPlace> createState() => _PollingPlaceState();
+}
+
+class _PollingPlaceState extends State<PollingPlace> {
+  late final WebViewController controller;
+  bool isLoading = true;
+  bool hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller =
+        WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onPageStarted:
+                  (_) => setState(() {
+                    isLoading = true;
+                    hasError = false;
+                  }),
+              onPageFinished: (_) => setState(() => isLoading = false),
+              onWebResourceError:
+                  (_) => setState(() {
+                    isLoading = false;
+                    hasError = true;
+                  }),
+            ),
+          )
+          ..loadRequest(
+            Uri.parse(
+              'https://voterservices.elections.maryland.gov/PollingPlaceSearch',
+            ),
+          );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final sorted = [...locations];
-
-    if (searchLat != null && searchLng != null) {
-      sorted.sort((a, b) {
-        final d1 = calculateDistance(
-          searchLat!, searchLng!,
-          double.parse(a["lat"]!), double.parse(a["lng"]!),
-        );
-        final d2 = calculateDistance(
-          searchLat!, searchLng!,
-          double.parse(b["lat"]!), double.parse(b["lng"]!),
-        );
-        return d1.compareTo(d2);
-      });
-    }
-
-    return LocationList(locations: sorted, showMore: false);
+    return Stack(
+      children: [
+        Positioned.fill(
+          child:
+              hasError
+                  ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.error_outline,
+                          color: MARYLAND_RED,
+                          size: 48,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          "Unable to load the voter search site.\nPlease check your internet connection.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  )
+                  : WebViewWidget(controller: controller),
+        ),
+        if (isLoading)
+          const Center(child: CircularProgressIndicator(color: MARYLAND_RED)),
+      ],
+    );
   }
 }

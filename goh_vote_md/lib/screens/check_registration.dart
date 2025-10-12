@@ -28,7 +28,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       )
       ..setBackgroundColor(const Color(0xFFFFFFFF))
       ..loadRequest(
-        Uri.parse('https://voterservices.elections.maryland.gov/votersearch'),
+        Uri.parse('https://voterservices.elections.maryland.gov/PollingPlaceSearch'),
       );
   }
 

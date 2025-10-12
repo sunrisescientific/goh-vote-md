@@ -35,13 +35,11 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
-    final screenHeight = Dimensions.screenHeight;
-    final screenWidth =  Dimensions.screenWidth;
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+          padding: EdgeInsets.symmetric(horizontal: Dimensions.screenWidth * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -54,10 +52,10 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
               Column(
                 children: helpfulLinks.entries.map((entry) {
                   return Padding(
-                    padding: EdgeInsets.symmetric(vertical: screenHeight * 0.008),
+                    padding: EdgeInsets.symmetric(vertical: Dimensions.screenHeight * 0.008),
                     child: SizedBox(
-                      width: screenWidth * 0.8,
-                      height: screenHeight * 0.08,
+                      width: Dimensions.screenWidth * 0.8,
+                      height: Dimensions.screenHeight * 0.08,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -74,7 +72,7 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
                         _launchURL(entry.value),
                         child: Text(
                           entry.key,
-                          style: const TextStyle(color: Colors.black, fontSize: 23),
+                          style: heading2,
                         ),
                       ),
                     ),

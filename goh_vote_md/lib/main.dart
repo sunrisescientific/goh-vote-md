@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:goh_vote_md/providers/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/county_provider.dart';
+import 'providers/calendar_provider.dart';
 import 'screens/check_registration.dart';
 import 'screens/contact.dart';
 import 'screens/calendar.dart';
@@ -20,9 +23,16 @@ void main() async{
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => CountyProvider(),
+    MultiProvider
+    (
+      providers:
+      [
+        ChangeNotifierProvider(create: (_) => CountyProvider()),
+        ChangeNotifierProvider(create: (_) => CalendarProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -35,7 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const HomePage(),
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      theme: ThemeData(scaffoldBackgroundColor: BACKGROUND),
     );
   }
 }
@@ -63,6 +73,21 @@ class _HomePageState extends State<HomePage> {
   void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(()
+    {
+      final county = Provider.of<CountyProvider>(context, listen: false);
+      final calendar = Provider.of<CalendarProvider>(context, listen: false);
+      final locations = Provider.of<LocationProvider>(context, listen: false);
+
+      county.fetchCountyData();
+      calendar.fetchCalendarData();
+      locations.initialize();
     });
   }
 

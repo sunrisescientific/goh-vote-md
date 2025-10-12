@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-48:/values-mn/values-mn.xml",
+            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-49:/values-mn/values-mn.xml",
             "map": [
                 {
                     "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/abeed4f47a72eff8f5b4e9bf7f2f3c91/transformed/jetified-play-services-basement-18.3.0/res/values-mn/values.xml",

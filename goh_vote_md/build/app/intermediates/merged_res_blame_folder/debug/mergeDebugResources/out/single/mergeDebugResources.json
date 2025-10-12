@@ -1,46 +1,46 @@
 [
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/drawable-v21_launch_background.xml.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/drawable-v21/launch_background.xml"
+        "merged": "com.example.goh_vote_md.app-debug-51:/drawable-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/drawable-xxhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/drawable-v21_launch_background.xml.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/drawable-v21/launch_background.xml"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/drawable-xxxhdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/drawable-xxxhdpi/ic_launcher_foreground.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/drawable-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/drawable-hdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/drawable-xhdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/drawable-xhdpi/ic_launcher_foreground.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/drawable-hdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/drawable-hdpi/ic_launcher_foreground.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/mipmap-hdpi/ic_launcher.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/drawable-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/drawable-mdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/mipmap-mdpi/ic_launcher.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/drawable-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/drawable-xhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/drawable-xxhdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/drawable-xxhdpi/ic_launcher_foreground.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/mipmap-hdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.goh_vote_md.app-debug-50:/drawable-mdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.goh_vote_md.app-main-44:/drawable-mdpi/ic_launcher_foreground.png"
+        "merged": "com.example.goh_vote_md.app-debug-51:/drawable-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.example.goh_vote_md.app-main-45:/drawable-xxxhdpi/ic_launcher_foreground.png"
     }
 ]

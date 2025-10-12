@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-48:/values/values.xml",
+            "outputFile": "com.example.goh_vote_md.app-mergeDebugResources-49:/values/values.xml",
             "map": [
                 {
                     "source": "/Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/android/app/src/main/res/values/styles.xml",
@@ -116,23 +116,6 @@
                     }
                 },
                 {
-                    "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/c092edbccc16347970ed4f22e8da111a/transformed/lifecycle-runtime-2.7.0/res/values/values.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "42",
-                        "endOffsets": "93"
-                    },
-                    "to": {
-                        "startLines": "362",
-                        "startColumns": "4",
-                        "startOffsets": "21584",
-                        "endColumns": "42",
-                        "endOffsets": "21622"
-                    }
-                },
-                {
                     "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/6e9b87ddca682c26951d767f3a5f05e2/transformed/core-1.16.0/res/values/values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,100,101,105,106,107,108,114,124,159,180,213",
@@ -205,6 +188,23 @@
                     }
                 },
                 {
+                    "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/adf8b01d02863fb2a9c1b3ee2307afe2/transformed/jetified-lifecycle-runtime-release/res/values/values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "42",
+                        "endOffsets": "93"
+                    },
+                    "to": {
+                        "startLines": "362",
+                        "startColumns": "4",
+                        "startOffsets": "21584",
+                        "endColumns": "42",
+                        "endOffsets": "21622"
+                    }
+                },
+                {
                     "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/b3d51a44ab6b56289d4858158a1ad6dd/transformed/jetified-savedstate-1.2.1/res/values/values.xml",
                     "from": {
                         "startLines": "2",
@@ -238,23 +238,6 @@
                         "endLines": "3,2155,2905,2989",
                         "endColumns": "60,12,24,24",
                         "endOffsets": "220,141279,166789,171305"
-                    }
-                },
-                {
-                    "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/1b91be3af319ede480d7185430690ee1/transformed/lifecycle-viewmodel-2.7.0/res/values/values.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "49",
-                        "endOffsets": "100"
-                    },
-                    "to": {
-                        "startLines": "365",
-                        "startColumns": "4",
-                        "startOffsets": "21741",
-                        "endColumns": "49",
-                        "endOffsets": "21786"
                     }
                 },
                 {
@@ -344,6 +327,23 @@
                         "startOffsets": "20015,21627",
                         "endColumns": "41,59",
                         "endOffsets": "20052,21682"
+                    }
+                },
+                {
+                    "source": "/Users/methashabambarande/.gradle/caches/8.10.2/transforms/c2f2fca048f661f824907d303b61704c/transformed/jetified-lifecycle-viewmodel-release/res/values/values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "49",
+                        "endOffsets": "100"
+                    },
+                    "to": {
+                        "startLines": "365",
+                        "startColumns": "4",
+                        "startOffsets": "21741",
+                        "endColumns": "49",
+                        "endOffsets": "21786"
                     }
                 },
                 {
