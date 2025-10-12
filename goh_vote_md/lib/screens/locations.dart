@@ -65,7 +65,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
               "lng": results.first.longitude.toString(),
             });
           } else {
-            enriched.add(loc); 
+            enriched.add(loc);
           }
         } catch (e) {
           debugPrint("Geocoding failed for ${loc["address"]}: $e");
@@ -122,37 +122,15 @@ class _LocationsScreenState extends State<LocationsScreen> {
               ScreenHeader(
                 logoPath: 'assets/title_logo.png',
                 countyName: selectedCounty,
-                title: "Locations",
+                title: "Voting Locations",
               ),
 
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: "Type address here",
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search, color: MARYLAND_YELLOW),
-                    onPressed: () {
-                      _updateSearch(_searchController.text);
-                    },
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
-                    borderRadius: BorderRadius.circular(roundedCorners),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
-                    borderRadius: BorderRadius.circular(roundedCorners),
-                  ),
-                ),
-                onSubmitted: _updateSearch,
-              ),
-              const SizedBox(height: 16),
-
+              // === TAB BUTTONS ===
               Row(
                 children: [
                   Expanded(
                     child: _TabButton(
-                      text: "Drop Box",
+                      text: "Polling Place",
                       isSelected: _selectedTab == 0,
                       onTap: () => setState(() => _selectedTab = 0),
                       isFirst: true,
@@ -161,7 +139,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                   ),
                   Expanded(
                     child: _TabButton(
-                      text: "Early Voting",
+                      text: "Drop Box",
                       isSelected: _selectedTab == 1,
                       onTap: () => setState(() => _selectedTab = 1),
                       isFirst: false,
@@ -170,7 +148,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                   ),
                   Expanded(
                     child: _TabButton(
-                      text: "Polling Place",
+                      text: "Early Voting",
                       isSelected: _selectedTab == 2,
                       onTap: () => setState(() => _selectedTab = 2),
                       isFirst: false,
@@ -182,12 +160,45 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
               const SizedBox(height: 16),
 
+              if (_selectedTab == 1 || _selectedTab == 2)
+                Column(
+                  children: [
+                    TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: "Type address here",
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.search, color: MARYLAND_YELLOW),
+                          onPressed: () {
+                            _updateSearch(_searchController.text);
+                          },
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
+                          borderRadius: BorderRadius.circular(roundedCorners),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: MARYLAND_RED, width: 3),
+                          borderRadius: BorderRadius.circular(roundedCorners),
+                        ),
+                      ),
+                      onSubmitted: _updateSearch,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+
               if (_dropBox.isEmpty || _earlyVoting.isEmpty || _polling.isEmpty)
                 const CircularProgressIndicator()
               else
                 IndexedStack(
                   index: _selectedTab,
                   children: [
+                    PollingPlace(
+                      locations: _polling,
+                      searchLat: _searchLat,
+                      searchLng: _searchLng,
+                    ),
                     DropBoxLocationsList(
                       locations: _dropBox,
                       searchLat: _searchLat,
@@ -195,11 +206,6 @@ class _LocationsScreenState extends State<LocationsScreen> {
                     ),
                     EarlyVotingLocationsList(
                       locations: _earlyVoting,
-                      searchLat: _searchLat,
-                      searchLng: _searchLng,
-                    ),
-                    PollingPlace(
-                      locations: _polling,
                       searchLat: _searchLat,
                       searchLng: _searchLng,
                     ),
@@ -345,7 +351,7 @@ class LocationList extends StatelessWidget {
 }
 
 double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-  const earthRadius = 6371; 
+  const earthRadius = 6371;
   final dLat = (lat2 - lat1) * (pi / 180);
   final dLon = (lon2 - lon1) * (pi / 180);
 
