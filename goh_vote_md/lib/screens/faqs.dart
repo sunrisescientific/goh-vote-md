@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
+import '../widgets/nav_bar.dart';
 
 class ExpandableSection extends StatefulWidget
 {
@@ -258,42 +259,46 @@ class FAQScreen extends StatelessWidget
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-        // padding: const EdgeInsets.only(left: 24, right: 24),
-        padding: EdgeInsets.symmetric(horizontal: Dimensions.screenWidth * 0.06),
-        child: Column
+    return Scaffold
+    (
+      body: SafeArea
+      (
+        child: SingleChildScrollView
         (
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children:
-          [
-            ScreenHeader(
-              logoPath: 'assets/title_logo.png',
-              countyName: selectedCounty,
-              title: "FAQs",
-            ),
-            FAQCategory
-            (
-              title: "Voting",
-              questions: votingQuestions,
-              answers: votingAnswers,
-            ),
-            FAQCategory
-            (
-              title: "Getting Involved",
-              questions: involvedQuestions,
-              answers: involvedAnswers,
-            ),
-            FAQCategory
-            (
-              title: "Registration",
-              questions: registrationQuestions,
-              answers: registrationAnswers,
-            ),
-          ],
+          // padding: const EdgeInsets.only(left: 24, right: 24),
+          padding: EdgeInsets.symmetric(horizontal: Dimensions.screenWidth * 0.06),
+          child: Column
+          (
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children:
+            [
+              ScreenHeader(
+                logoPath: 'assets/title_logo.png',
+                countyName: selectedCounty,
+                title: "FAQs",
+              ),
+              FAQCategory
+              (
+                title: "Voting",
+                questions: votingQuestions,
+                answers: votingAnswers,
+              ),
+              FAQCategory
+              (
+                title: "Getting Involved",
+                questions: involvedQuestions,
+                answers: involvedAnswers,
+              ),
+              FAQCategory
+              (
+                title: "Registration",
+                questions: registrationQuestions,
+                answers: registrationAnswers,
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
