@@ -48,7 +48,7 @@ class NavBar extends StatelessWidget {
                 NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
                 NavigationDestination(icon: Icon(Icons.person), label: 'Look up'),
                 NavigationDestination(icon: Icon(Icons.calendar_month), label: 'Calendar'),
-                NavigationDestination(icon: Icon(Icons.campaign), label: 'Dis/Mis-\nInformation'),
+                NavigationDestination(icon: Icon(Icons.campaign), label: 'Report'),
                 NavigationDestination(icon: Icon(Icons.phone), label: 'Contact'),
                 NavigationDestination(icon: Icon(Icons.link), label: 'Links'),
                 NavigationDestination(icon: Icon(Icons.location_on), label: 'Locations'),
