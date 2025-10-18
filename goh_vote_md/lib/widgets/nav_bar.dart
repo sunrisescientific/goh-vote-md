@@ -35,7 +35,7 @@ class NavBar extends StatelessWidget {
       child: selectedIndex == 0
           ? const SizedBox(height: 0)
           : NavigationBar(
-              selectedIndex: selectedIndex,
+              selectedIndex: selectedIndex == 7 ? 0 : selectedIndex,
               onDestinationSelected: onItemTapped,
               labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
               labelTextStyle: MaterialStateProperty.all(

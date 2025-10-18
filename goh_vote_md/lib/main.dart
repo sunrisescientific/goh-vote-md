@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
     ContactScreen(),
     HelpfulLinksScreen(),
     LocationsScreen(),
+    FAQScreen(),
   ];
 
   void onItemTapped(int index) {
@@ -109,10 +110,10 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: MARYLAND_YELLOW,
             child: const Icon(Icons.question_mark, size: 22, color: Colors.white),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FAQScreen()),
-              );
+              setState(()
+              {
+                _selectedIndex = 7;
+              });
             },
           ),
         ),

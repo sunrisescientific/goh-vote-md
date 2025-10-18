@@ -259,7 +259,6 @@ class LocationList extends StatelessWidget {
       ),
       child: ListView.separated(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(8),
         itemCount: locations.length + (showMore ? 1 : 0),
         separatorBuilder: (context, index) => const Divider(),
