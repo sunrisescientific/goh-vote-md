@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:http/http.dart' as http;
 import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
@@ -29,6 +31,9 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
 
   File? _selectedFile;
   bool _sendCopy = false;
+  bool _isSubmitting = false;
+
+  final String _scriptUrl = "https://script.google.com/macros/s/AKfycbzDEYlRTWTG-3481epliholYUjoqtqzsPoaZjWfkLeZrh4mBekFKx7Dgz-8In7WWo9s/exec";
 
   @override
   void initState() {
@@ -49,9 +54,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
       labelText: label,
       labelStyle:
           const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: Colors.blueAccent, width: 1.5),
@@ -84,6 +87,72 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
     return null;
   }
 
+Future<void> _submitForm() async {
+  if (!_formKey.currentState!.validate()) return;
+
+  setState(() => _isSubmitting = true);
+
+  try {
+    final fileUrl = _selectedFile != null ? _selectedFile!.path.split('/').last : '';
+
+    final body = {
+      'name': _nameController.text,
+      'email': _emailController.text,
+      'phone': _phoneController.text,
+      'date': _dateController.text,
+      'location': _locationController.text,
+      'description': _descriptionController.text,
+      'fileUrl': fileUrl,
+      'sendCopy': _sendCopy.toString(),
+    };
+
+    final response = await http.post(
+      Uri.parse(_scriptUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      try {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['result'] == 'success') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Form submitted successfully!')),
+          );
+          _formKey.currentState!.reset();
+          setState(() {
+            _selectedFile = null;
+            _sendCopy = false;
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${jsonResponse['message']}')),
+          );
+        }
+      } catch (_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Submission succeeded (response not JSON).')),
+        );
+      }
+    } 
+    // else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('Server error: ${response.statusCode}')),
+    //   );
+    // }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error submitting form: $e')),
+    );
+  } finally {
+    setState(() => _isSubmitting = false);
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     final countyProvider = Provider.of<CountyProvider>(context);
@@ -93,7 +162,6 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(
             horizontal: Dimensions.screenWidth * 0.06,
             vertical: 10,
@@ -117,8 +185,8 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
 
               Container(
                 width: Dimensions.screenWidth * 0.95,
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(44, 45, 45, 1),
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(44, 45, 45, 1),
                 ),
                 padding: const EdgeInsets.all(15),
                 child: Column(
@@ -157,16 +225,15 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                             TextFormField(
                               controller: _nameController,
                               decoration: _inputDecoration('Name *'),
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please enter your name' : null,
+                              validator: (v) =>
+                                  v!.isEmpty ? 'Please enter your name' : null,
                             ),
                             const SizedBox(height: 15),
 
                             TextFormField(
                               controller: _emailController,
-                              decoration: _inputDecoration('Email *').copyWith(
-                                prefixIcon: const Icon(Icons.email_outlined),
-                              ),
+                              decoration: _inputDecoration('Email *')
+                                  .copyWith(prefixIcon: const Icon(Icons.email_outlined)),
                               validator: _validateEmail,
                             ),
                             const SizedBox(height: 15),
@@ -174,9 +241,8 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                             TextFormField(
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
-                              decoration: _inputDecoration('Phone *').copyWith(
-                                prefixIcon: const Icon(Icons.phone_outlined),
-                              ),
+                              decoration: _inputDecoration('Phone *')
+                                  .copyWith(prefixIcon: const Icon(Icons.phone_outlined)),
                               validator: _validatePhone,
                             ),
                             const SizedBox(height: 15),
@@ -184,24 +250,22 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                             TextFormField(
                               controller: _dateController,
                               readOnly: true,
-                              decoration: _inputDecoration('Date *').copyWith(
-                                suffixIcon:
-                                    const Icon(Icons.calendar_today_outlined),
-                              ),
+                              decoration: _inputDecoration('Date *')
+                                  .copyWith(suffixIcon: const Icon(Icons.calendar_today_outlined)),
                               onTap: () async {
-                                final pickedDate = await showDatePicker(
+                                final picked = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
                                   firstDate: DateTime(2020),
                                   lastDate: DateTime(2030),
                                 );
-                                if (pickedDate != null) {
+                                if (picked != null) {
                                   _dateController.text =
-                                      "${pickedDate.month}/${pickedDate.day}/${pickedDate.year}";
+                                      "${picked.month}/${picked.day}/${picked.year}";
                                 }
                               },
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please select a date' : null,
+                              validator: (v) =>
+                                  v!.isEmpty ? 'Please select a date' : null,
                             ),
                             const SizedBox(height: 15),
 
@@ -209,9 +273,8 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                               controller: _locationController,
                               decoration: _inputDecoration(
                                   'Location of the dis/misinformation *'),
-                              validator: (value) => value!.isEmpty
-                                  ? 'Please enter the location'
-                                  : null,
+                              validator: (v) =>
+                                  v!.isEmpty ? 'Please enter the location' : null,
                             ),
                             const SizedBox(height: 15),
 
@@ -219,7 +282,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                               controller: _descriptionController,
                               maxLines: 4,
                               decoration: _inputDecoration('Description *'),
-                              validator: (value) => value!.isEmpty
+                              validator: (v) => v!.isEmpty
                                   ? 'Please describe the dis/misinformation'
                                   : null,
                             ),
@@ -253,30 +316,20 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Icon(
-                                        Icons.insert_drive_file_outlined,
-                                        size: 50,
-                                        color: Colors.blueAccent,
-                                      ),
+                                      const Icon(Icons.insert_drive_file_outlined,
+                                          size: 50, color: Colors.blueAccent),
                                       const SizedBox(height: 10),
-                                      const Text(
-                                        "Drop your files here",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
+                                      const Text("Drop your files here",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87)),
                                       TextButton(
                                         onPressed: _pickFile,
-                                        child: const Text(
-                                          "Browse",
-                                          style: TextStyle(
-                                            color: Colors.blueAccent,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                        child: const Text("Browse",
+                                            style: TextStyle(
+                                                color: Colors.blueAccent,
+                                                fontWeight: FontWeight.bold)),
                                       ),
-                                      const SizedBox(height: 8),
                                       if (_selectedFile != null)
                                         Text(
                                           _selectedFile!.path.split('/').last,
@@ -296,11 +349,8 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                               children: [
                                 Checkbox(
                                   value: _sendCopy,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _sendCopy = value ?? false;
-                                    });
-                                  },
+                                  onChanged: (v) =>
+                                      setState(() => _sendCopy = v ?? false),
                                   activeColor: Colors.blueAccent,
                                 ),
                                 const Text(
@@ -316,8 +366,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                                 width: Dimensions.screenWidth * 0.3,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color(0xFFBFC8FF), 
+                                    backgroundColor: const Color(0xFFBFC8FF),
                                     foregroundColor: Colors.black87,
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 14),
@@ -325,23 +374,18 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                              'Form submitted successfully!'),
+                                  onPressed:
+                                      _isSubmitting ? null : _submitForm,
+                                  child: _isSubmitting
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.black)
+                                      : const Text(
+                                          'Submit',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      );
-                                    }
-                                  },
-                                  child: const Text(
-                                    'Submit',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                                 ),
                               ),
                             ),

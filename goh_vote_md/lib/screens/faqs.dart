@@ -165,26 +165,32 @@ class FAQScreen extends StatelessWidget
 {
   final List<String> votingQuestions =
   [
-    "Where do I go to vote?",
-    "How is the voting unit accessible to voters with disabilities?",
-    "What are the ways I can vote in Maryland?",
-    "What forms of ID do I need to show when I vote?"
+    "Who can vote?",
+    "When can I vote?",
+    "Where should I vote?",
+    "How will I cast my vote?"
   ];
 
   final List<String> votingAnswers =
   [
-    "Your polling place location is printed on your Voter Notification Card. If you do not have your Voter Notification Card, please visit the Polling Place Look-up.",
-    "Unlike other voting systems, DRE voting systems allow most voters with disabilities to vote a secret ballot. The State's voting system accommodates voters with disabilities by offering:\n\n"
-    "• An audio ballot. Using headphones, the voter listens to the ballot and records the vote using a keypad. Both the headphones and keypad are provided. To assure the privacy of the voter, the voting unit's screen is blank while the audio ballot feature is being used.\n"
-    "• A magnified ballot for voters who have low vision.\n"
-    "• A high contrast ballot for voters with visual impairments.\n"
-    "• An adjustable screen to accommodate voters who prefer or need to sit while voting.\n\n"
-    "To use an audio ballot just ask an election judge for the particular option. You will not be required to provide an explanation or fill out additional paperwork. Election judges will be available to answer questions and, if needed, provide assistance.\n\n"
-    "If you need assistance voting, you may select someone to assist in the voting process. Maryland law prohibits a voter's employer or agent of the employer or an officer or agent of the voter's union from serving as a voter's assistant. An election judge may assist a voter, but only in the presence of another election judge of a different political party.",
+    "Any registered voter can vote. If you are not registered to vote, learn about how to register.",
+
+    "For the 2026 Gubernatorial Primary Election:\n\n"
+    "• You can either vote in person during early voting or on election day or by mail-in ballot.\n"
+    "• For the 2026 Gubernatorial Primary Election, early voting will be available from Thursday, June 11, 2026 through Thursday, June 18, 2026 (including Saturday and Sunday) from 7 am to 8 pm.\n"
+    "• On election day, Tuesday, June 23, 2026, you must vote at your assigned polling place.All election day polling places are open continuously from 7 am until 8 pm on. Anyone in line at 8 pm will be allowed to vote.\n"
+    "If you are unable to vote during early voting or on election day, you may vote by mail-in ballot. Find out more information about mail-in voting.\n\n"
+    "Important Note: The law requires the State Board of Elections and each local board of elections to refer to absentee ballots as \"mail-in ballots\" and absentee voting as \"mail-in voting.\" Please note that this change in terminology does NOT change the process of mail-in voting.\n",
     "You can vote in person during Early Voting, in person on Election Day at your assigned polling place, or by mail via a mail-in ballot (formerly called absentee ballot).",
-    "For first-time Maryland voters, or if the polling officials require verification, you may need to show either:\n"
-    "• A current valid photo ID (Maryland DMV license, MVA-issued ID, student/employee/military ID, U.S. passport, etc.)\n"
-    "• A current (within 3 months) utility bill, bank statement, government check, paycheck, or other government document showing your name and address."
+
+    "For the 2024 Presidential Primary Election:\n"
+    "• During early voting, you can vote at any early voting center in the jurisdiction where you live.\n"
+    "• On election day, you must vote at your assigned polling place.",
+
+    "For the 2024 Presidential Primary Election:\n"
+    "•	During early voting or on election day, you will hand mark a paper ballot. Use the pen provided to fill in the oval next to your choices. You can also mark your ballot electronically. Review your ballot choices, place your voted ballot into the privacy sleeve and take it to the scanner. An election worker will direct you to insert your ballot into the scanning unit to cast your vote. Your ballot will be scanned and dropped into a secure ballot box.\n"
+    "•	There will be instructions available at the early voting centers and election day polling places to familiarize you with the ballot. You may ask an election judge to explain how to vote, but you must cast your vote alone, unless you are unable to do so because you have a disability or are unable to read or write the English language.\n"
+    "•	For mail-in voting and provisional voting, you will issued a paper ballot. Use a black ink pen to fill in the oval next to your choices. Provisional ballots are returned to the local election office in secure bags on election night. Mail-in and provisional ballots will be scanned at the local election office.\n"
   ];
 
   final List<String> involvedQuestions =
