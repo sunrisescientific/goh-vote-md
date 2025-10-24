@@ -19,7 +19,7 @@ class NavBar extends StatelessWidget {
         indicatorColor: Colors.transparent,
         iconTheme: WidgetStateProperty.resolveWith<IconThemeData>(
           (states) {
-            if (states.contains(WidgetState.selected)) {
+            if (states.contains(WidgetState.selected) && selectedIndex != 7) {
               return IconThemeData(
                 color: SELECTED,
                 size: navIconSize,
@@ -37,7 +37,7 @@ class NavBar extends StatelessWidget {
           : NavigationBar(
               selectedIndex: selectedIndex == 7 ? 0 : selectedIndex,
               onDestinationSelected: onItemTapped,
-              labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+              labelBehavior: selectedIndex != 7 ? NavigationDestinationLabelBehavior.onlyShowSelected : NavigationDestinationLabelBehavior.alwaysHide,
               labelTextStyle: MaterialStateProperty.all(
                 TextStyle(
                   fontSize: navLabelSize,
