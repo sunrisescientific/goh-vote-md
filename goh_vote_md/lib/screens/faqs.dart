@@ -168,6 +168,7 @@ class FAQScreen extends StatelessWidget
 
   final List<RichText> votingAnswers = votingAnswersFormatted;
 
+  /*
   final List<String> involvedQuestions = votingQuestionsFormatted;
 
   final List<RichText> involvedAnswers = votingAnswersFormatted;
@@ -175,6 +176,7 @@ class FAQScreen extends StatelessWidget
   final List<String> registrationQuestions = votingQuestionsFormatted;
 
   final List<RichText> registrationAnswers = votingAnswersFormatted;
+  */
 
   @override
   Widget build(BuildContext context)
@@ -206,6 +208,7 @@ class FAQScreen extends StatelessWidget
                 questions: votingQuestions,
                 answers: votingAnswers,
               ),
+              /*
               FAQCategory
               (
                 title: "Getting Involved",
@@ -218,6 +221,7 @@ class FAQScreen extends StatelessWidget
                 questions: registrationQuestions,
                 answers: registrationAnswers,
               ),
+              */
             ],
           ),
         ),
