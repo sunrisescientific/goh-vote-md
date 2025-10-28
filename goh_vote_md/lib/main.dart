@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:goh_vote_md/providers/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/county_provider.dart';
-import 'providers/calendar_provider.dart';
 import 'screens/check_registration.dart';
 import 'screens/contact.dart';
 import 'screens/calendar.dart';
@@ -23,16 +20,9 @@ void main() async{
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
   runApp(
-    MultiProvider
-    (
-      providers:
-      [
-        ChangeNotifierProvider(create: (_) => CountyProvider()),
-        ChangeNotifierProvider(create: (_) => CalendarProvider()),
-        ChangeNotifierProvider(create: (_) => LocationProvider()),
-      ],
+    ChangeNotifierProvider(
+      create: (_) => CountyProvider(),
       child: const MyApp(),
     ),
   );
@@ -43,9 +33,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Dimensions.init(context);
     return MaterialApp(
       home: const HomePage(),
-      theme: ThemeData(scaffoldBackgroundColor: BACKGROUND),
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
     );
   }
 }
@@ -68,27 +60,11 @@ class _HomePageState extends State<HomePage> {
     ContactScreen(),
     HelpfulLinksScreen(),
     LocationsScreen(),
-    FAQScreen(),
   ];
 
   void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(()
-    {
-      final county = Provider.of<CountyProvider>(context, listen: false);
-      final calendar = Provider.of<CalendarProvider>(context, listen: false);
-      final locations = Provider.of<LocationProvider>(context, listen: false);
-
-      county.fetchCountyData();
-      calendar.fetchCalendarData();
-      locations.initialize();
     });
   }
 
@@ -110,10 +86,10 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: MARYLAND_YELLOW,
             child: const Icon(Icons.question_mark, size: 22, color: Colors.white),
             onPressed: () {
-              setState(()
-              {
-                _selectedIndex = 7;
-              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FAQScreen()),
+              );
             },
           ),
         ),
@@ -130,7 +106,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Dimensions.init(context);
     final homeState = context.findAncestorStateOfType<_HomePageState>();
     final screenHeight = Dimensions.screenHeight;
     final screenWidth =  Dimensions.screenWidth;

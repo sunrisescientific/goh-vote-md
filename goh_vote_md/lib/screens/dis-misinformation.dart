@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:http/http.dart' as http;
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Dis_MisinformationScreen extends StatefulWidget {
   const Dis_MisinformationScreen({super.key});
@@ -31,29 +31,23 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
 
   File? _selectedFile;
   bool _sendCopy = false;
-  bool _isSubmitting = false;
-
-  final String _scriptUrl = "https://script.google.com/macros/s/AKfycbzDEYlRTWTG-3481epliholYUjoqtqzsPoaZjWfkLeZrh4mBekFKx7Dgz-8In7WWo9s/exec";
+  bool _isSending = false;
+  String? _message;
 
   @override
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(
-              'https://www.youtube.com/watch?v=55n6W5ZUhQo') ??
-          '',
-      flags: const YoutubePlayerFlags(
-        autoPlay: false,
-        mute: false,
-      ),
+      initialVideoId:
+          YoutubePlayer.convertUrlToId('https://www.youtube.com/watch?v=55n6W5ZUhQo') ?? '',
+      flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
     );
   }
 
   InputDecoration _inputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle:
-          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      labelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
@@ -75,7 +69,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Please enter your email';
     final emailRegex = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
     if (!emailRegex.hasMatch(value)) return 'Please enter a valid email';
     return null;
   }
@@ -87,71 +81,88 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
     return null;
   }
 
-Future<void> _submitForm() async {
-  if (!_formKey.currentState!.validate()) return;
+  Future<void> _sendEmailReport() async {
+    setState(() {
+      _isSending = true;
+      _message = null;
+    });
 
-  setState(() => _isSubmitting = true);
+    const String username = 'thistest314@gmail.com';
+    const String password = 'App_password_here';
+    String adminEmail = 'topemail314@gmail.com';
 
-  try {
-    final fileUrl = _selectedFile != null ? _selectedFile!.path.split('/').last : '';
+    final smtpServer = gmail(username, password);
 
-    final body = {
-      'name': _nameController.text,
-      'email': _emailController.text,
-      'phone': _phoneController.text,
-      'date': _dateController.text,
-      'location': _locationController.text,
-      'description': _descriptionController.text,
-      'fileUrl': fileUrl,
-      'sendCopy': _sendCopy.toString(),
-    };
+    final bodyHtml = '''
+      <h2>Dis/Misinformation Report</h2>
+      <p><b>Name:</b> ${_nameController.text}</p>
+      <p><b>Email:</b> ${_emailController.text}</p>
+      <p><b>Phone:</b> ${_phoneController.text}</p>
+      <p><b>Date:</b> ${_dateController.text}</p>
+      <p><b>Location:</b> ${_locationController.text}</p>
+      <p><b>Description:</b><br>${_descriptionController.text}</p>
+    ''';
 
-    final response = await http.post(
-      Uri.parse(_scriptUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(body),
-    );
+    final message = Message()
+      ..from = Address(username, 'Dis/Misinformation Report Form')
+      ..recipients.add('formdoer314@gmail.com')
+      ..subject = 'Dis/Misinformation Report from ${_nameController.text}'
+      ..html = bodyHtml;
 
-    debugPrint('Response status: ${response.statusCode}');
-    debugPrint('Response body: ${response.body}');
+    if (_selectedFile != null) {
+      message.attachments = [FileAttachment(_selectedFile!)];
+    }
 
-    if (response.statusCode == 200) {
-      try {
-        final jsonResponse = jsonDecode(response.body);
-        if (jsonResponse['result'] == 'success') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Form submitted successfully!')),
-          );
-          _formKey.currentState!.reset();
-          setState(() {
-            _selectedFile = null;
-            _sendCopy = false;
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${jsonResponse['message']}')),
-          );
+    try {
+
+      if (_sendCopy) {
+        final copyMsg = Message()
+          ..from = Address(username, 'Dis/Misinformation Report Form')
+          ..recipients.add(_emailController.text.trim())
+          ..subject = 'Copy of your Dis/Misinformation Report'
+          ..html = "<p>Hello ${_nameController.text},</p>$bodyHtml";
+
+        if (_selectedFile != null) {
+          copyMsg.attachments = [FileAttachment(_selectedFile!)];
         }
-      } catch (_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Submission succeeded (response not JSON).')),
-        );
-      }
-    } 
-    // else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text('Server error: ${response.statusCode}')),
-    //   );
-    // }
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error submitting form: $e')),
-    );
-  } finally {
-    setState(() => _isSubmitting = false);
-  }
-}
 
+        await send(copyMsg, smtpServer);
+      }
+
+      final adminMessage = Message()
+        ..from = Address(username, 'Dis/Misinformation Form')
+        ..recipients.add(adminEmail)
+        ..subject = 'New form submission'
+        ..text = 'A new user submitted the form.\nEmail: ${message.recipients.first}'
+        ..html = bodyHtml;
+      if (_selectedFile != null) {
+          adminMessage.attachments = [FileAttachment(_selectedFile!)];
+        }
+
+      final adminReport = await send(adminMessage, smtpServer);
+      print('Admin message sent: $adminReport');
+
+      setState(() {
+        _message = 'Report sent successfully!';
+          _nameController.clear();
+          _emailController.clear();
+          _phoneController.clear();
+          _dateController.clear();
+          _locationController.clear();
+          _descriptionController.clear();
+          _selectedFile = null;
+          _sendCopy = false;
+      });
+    } on MailerException catch (e) {
+      setState(() {
+        _message = 'Failed to send: ${e.problems.map((p) => p.msg).join(', ')}';
+      });
+    } finally {
+      setState(() {
+        _isSending = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +186,6 @@ Future<void> _submitForm() async {
                 title: "Reporting Dis/Misinformation",
               ),
               const SizedBox(height: 15),
-
               YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
@@ -185,9 +195,7 @@ Future<void> _submitForm() async {
 
               Container(
                 width: Dimensions.screenWidth * 0.95,
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(44, 45, 45, 1),
-                ),
+                color: const Color.fromRGBO(44, 45, 45, 1),
                 padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
@@ -201,12 +209,8 @@ Future<void> _submitForm() async {
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      "Election dis/misinformation means incorrect or misleading information regarding the TIME, PLACE, OR MANNER OF AN ELECTION, ELECTION RESULTS, OR VOTING RIGHTS in Maryland. If you see any dis/misinformation on social media, report it to the State Board of Elections. As the trusted source of election information, we will correct the record.",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      "Election dis/misinformation means incorrect or misleading information regarding the TIME, PLACE, OR MANNER OF AN ELECTION, ELECTION RESULTS, OR VOTING RIGHTS in Maryland. If you see any dis/misinformation on social media, report it to the State Board of Elections.",
+                      style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
 
@@ -220,7 +224,6 @@ Future<void> _submitForm() async {
                       child: Form(
                         key: _formKey,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextFormField(
                               controller: _nameController,
@@ -229,29 +232,29 @@ Future<void> _submitForm() async {
                                   v!.isEmpty ? 'Please enter your name' : null,
                             ),
                             const SizedBox(height: 15),
-
                             TextFormField(
                               controller: _emailController,
-                              decoration: _inputDecoration('Email *')
-                                  .copyWith(prefixIcon: const Icon(Icons.email_outlined)),
+                              decoration: _inputDecoration('Email *').copyWith(
+                                prefixIcon: const Icon(Icons.email_outlined),
+                              ),
                               validator: _validateEmail,
                             ),
                             const SizedBox(height: 15),
-
                             TextFormField(
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
-                              decoration: _inputDecoration('Phone *')
-                                  .copyWith(prefixIcon: const Icon(Icons.phone_outlined)),
+                              decoration: _inputDecoration('Phone *').copyWith(
+                                prefixIcon: const Icon(Icons.phone_outlined),
+                              ),
                               validator: _validatePhone,
                             ),
                             const SizedBox(height: 15),
-
                             TextFormField(
                               controller: _dateController,
                               readOnly: true,
-                              decoration: _inputDecoration('Date *')
-                                  .copyWith(suffixIcon: const Icon(Icons.calendar_today_outlined)),
+                              decoration: _inputDecoration('Date *').copyWith(
+                                suffixIcon: const Icon(Icons.calendar_today_outlined),
+                              ),
                               onTap: () async {
                                 final picked = await showDatePicker(
                                   context: context,
@@ -268,47 +271,35 @@ Future<void> _submitForm() async {
                                   v!.isEmpty ? 'Please select a date' : null,
                             ),
                             const SizedBox(height: 15),
-
                             TextFormField(
                               controller: _locationController,
-                              decoration: _inputDecoration(
-                                  'Location of the dis/misinformation *'),
+                              decoration: _inputDecoration('Location *'),
                               validator: (v) =>
-                                  v!.isEmpty ? 'Please enter the location' : null,
+                                  v!.isEmpty ? 'Please enter a location' : null,
                             ),
                             const SizedBox(height: 15),
-
                             TextFormField(
                               controller: _descriptionController,
                               maxLines: 4,
                               decoration: _inputDecoration('Description *'),
-                              validator: (v) => v!.isEmpty
-                                  ? 'Please describe the dis/misinformation'
-                                  : null,
+                              validator: (v) =>
+                                  v!.isEmpty ? 'Please describe the issue' : null,
                             ),
                             const SizedBox(height: 25),
 
-                            const Text(
-                              'Screenshot or photo (optional)',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
-                            ),
+                            const Text('Screenshot or photo (optional)',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
                             const SizedBox(height: 8),
-
                             GestureDetector(
                               onTap: _pickFile,
                               child: DottedBorder(
                                 color: Colors.grey,
-                                strokeWidth: 1.2,
                                 dashPattern: const [6, 4],
                                 borderType: BorderType.RRect,
                                 radius: const Radius.circular(10),
                                 child: Container(
-                                  width: double.infinity,
                                   padding: const EdgeInsets.symmetric(vertical: 35),
+                                  width: double.infinity,
                                   decoration: BoxDecoration(
                                     color: Colors.grey[50],
                                     borderRadius: BorderRadius.circular(10),
@@ -319,25 +310,13 @@ Future<void> _submitForm() async {
                                       const Icon(Icons.insert_drive_file_outlined,
                                           size: 50, color: Colors.blueAccent),
                                       const SizedBox(height: 10),
-                                      const Text("Drop your files here",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87)),
+                                      const Text("Drop your files here"),
                                       TextButton(
                                         onPressed: _pickFile,
-                                        child: const Text("Browse",
-                                            style: TextStyle(
-                                                color: Colors.blueAccent,
-                                                fontWeight: FontWeight.bold)),
+                                        child: const Text("Browse"),
                                       ),
                                       if (_selectedFile != null)
-                                        Text(
-                                          _selectedFile!.path.split('/').last,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Colors.black54,
-                                          ),
-                                        ),
+                                        Text(_selectedFile!.path.split('/').last),
                                     ],
                                   ),
                                 ),
@@ -351,44 +330,53 @@ Future<void> _submitForm() async {
                                   value: _sendCopy,
                                   onChanged: (v) =>
                                       setState(() => _sendCopy = v ?? false),
-                                  activeColor: Colors.blueAccent,
                                 ),
-                                const Text(
-                                  "Send me a copy of my responses",
-                                  style: TextStyle(color: Colors.black87),
-                                ),
+                                const Text("Send me a copy of my responses"),
                               ],
                             ),
                             const SizedBox(height: 25),
 
                             Center(
-                              child: SizedBox(
-                                width: Dimensions.screenWidth * 0.3,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFBFC8FF),
-                                    foregroundColor: Colors.black87,
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 14),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFBFC8FF),
+                                  foregroundColor: Colors.black87,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14, horizontal: 30),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  onPressed:
-                                      _isSubmitting ? null : _submitForm,
-                                  child: _isSubmitting
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.black)
-                                      : const Text(
-                                          'Submit',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
                                 ),
+                                onPressed: _isSending
+                                    ? null
+                                    : () {
+                                        if (_formKey.currentState!.validate()) {
+                                          _sendEmailReport();
+                                        }
+                                      },
+                                child: _isSending
+                                    ? const CircularProgressIndicator(color: Colors.black)
+                                    : const Text(
+                                        'Submit',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                               ),
                             ),
+                            if (_message != null) ...[
+                              const SizedBox(height: 16),
+                              Text(
+                                _message!,
+                                style: TextStyle(
+                                  color: _message!.contains('successfully')
+                                      ? Colors.green
+                                      : Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),

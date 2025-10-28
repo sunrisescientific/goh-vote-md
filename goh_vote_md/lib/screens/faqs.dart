@@ -32,7 +32,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
   {
     return Padding
     (
-      padding: EdgeInsets.only(bottom: 14),
+      padding: EdgeInsets.only(bottom: 14, right: 10),
       child: Container
       (
         width: expandableBoxSize,
