@@ -120,13 +120,13 @@ class _ExpandableSectionState extends State<ExpandableSection>
 
 class FAQCategory extends StatelessWidget
 {
-  final String title;
+  // final String title;
   final List<String> questions;
   final List<RichText> answers;
 
   const FAQCategory
   ({
-    required this.title,
+    // required this.title,
     required this.questions,
     required this.answers,
   });
@@ -139,11 +139,11 @@ class FAQCategory extends StatelessWidget
       crossAxisAlignment: CrossAxisAlignment.start,
       children:
       [
-        Text
-        (
-          title,
-          style: heading2
-        ),
+        // Text
+        // (
+        //   title,
+        //   style: heading2
+        // ),
         SizedBox(height: 12),
         Column
         (
@@ -204,7 +204,7 @@ class FAQScreen extends StatelessWidget
               ),
               FAQCategory
               (
-                title: "Voting",
+                // title: "Voting",
                 questions: votingQuestions,
                 answers: votingAnswers,
               ),

@@ -6,6 +6,7 @@ import '../widgets/contact_row.dart';
 import '../widgets/county_dropdown.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -22,22 +23,22 @@ class _ContactScreenState extends State<ContactScreen> {
     final selectedCounty = countyProvider.selectedCounty;
 
     final stateRows = const [
-      ContactRow(icon: Icons.phone, text: "410-269-2840"),
-      ContactRow(icon: Icons.mail, text: "info.sbe@maryland.gov"),
-      ContactRow(icon: Icons.language, text: "elections.maryland.gov"),
-      ContactRow(icon: Icons.pin_drop, text: "151 West Street, Suite 200 \nAnnapolis, MD 21401"),
-      ContactRow(icon: Icons.numbers, text: "x.com/md_sbe"),
-      ContactRow(icon: Icons.numbers, text: "instagram.com/md_sbe"),
+      ContactRow(icon: Icons.phone, text: "410-269-2840", url: false),
+      ContactRow(icon: Icons.mail, text: "info.sbe@maryland.gov", url: false),
+      ContactRow(icon: Icons.language, text: "elections.maryland.gov", url: true),
+      ContactRow(icon: Icons.pin_drop, text: "151 West Street, Suite 200 \nAnnapolis, MD 21401", url: false),
+      ContactRow(icon: FontAwesomeIcons.twitter, text: "x.com/md_sbe", url: true),
+      ContactRow(icon: FontAwesomeIcons.instagram, text: "instagram.com/md_sbe", url: true),
     ];
 
     Widget countyDropdown = CountyDropdown();
 
     List<ContactRow> countyRows = countyProvider.selectedCountyContact != null
         ? [
-            ContactRow(icon: Icons.phone, text: countyProvider.selectedCountyContact!.phone),
-            ContactRow(icon: Icons.mail, text: countyProvider.selectedCountyContact!.email),
-            ContactRow(icon: Icons.language, text: countyProvider.selectedCountyContact!.website),
-            ContactRow(icon: Icons.pin_drop, text: countyProvider.selectedCountyContact!.address),
+            ContactRow(icon: Icons.phone, text: countyProvider.selectedCountyContact!.phone, url: false),
+            ContactRow(icon: Icons.mail, text: countyProvider.selectedCountyContact!.email, url: false),
+            ContactRow(icon: Icons.language, text: countyProvider.selectedCountyContact!.website, url: true),
+            ContactRow(icon: Icons.pin_drop, text: countyProvider.selectedCountyContact!.address, url: false),
           ]
         : [];
 

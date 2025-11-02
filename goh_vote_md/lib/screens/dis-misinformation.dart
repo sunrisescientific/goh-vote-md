@@ -88,7 +88,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
     });
 
     const String username = 'thistest314@gmail.com';
-    const String password = 'App_password_here';
+    const String password = 'password_here';
     String adminEmail = 'topemail314@gmail.com';
 
     final smtpServer = gmail(username, password);

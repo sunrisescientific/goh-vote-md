@@ -48,6 +48,7 @@ MERGED from [:shared_preferences_android] /Users/methashabambarande/Documents/Gi
 MERGED from [:webview_flutter_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/webview_flutter_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:geolocator_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/geolocator_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-15:12
 MERGED from [com.google.android.gms:play-services-location:21.2.0] /Users/methashabambarande/.gradle/caches/8.10.2/transforms/cc3336a24e8ef5d3d66fff7f5ca80854/transformed/jetified-play-services-location-21.2.0/AndroidManifest.xml:2:1-9:12
+MERGED from [:connectivity_plus] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/connectivity_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_inappwebview_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/flutter_inappwebview_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-48:12
 MERGED from [:flutter_plugin_android_lifecycle] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:geocoding_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/geocoding_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
@@ -161,6 +162,8 @@ MERGED from [:geolocator_android] /Users/methashabambarande/Documents/GitHub/goh
 MERGED from [:geolocator_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/geolocator_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-location:21.2.0] /Users/methashabambarande/.gradle/caches/8.10.2/transforms/cc3336a24e8ef5d3d66fff7f5ca80854/transformed/jetified-play-services-location-21.2.0/AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-location:21.2.0] /Users/methashabambarande/.gradle/caches/8.10.2/transforms/cc3336a24e8ef5d3d66fff7f5ca80854/transformed/jetified-play-services-location-21.2.0/AndroidManifest.xml:5:5-44
+MERGED from [:connectivity_plus] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/connectivity_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:connectivity_plus] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/connectivity_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_inappwebview_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/flutter_inappwebview_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_inappwebview_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/flutter_inappwebview_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
@@ -315,6 +318,10 @@ ADDED from [:geolocator_android] /Users/methashabambarande/Documents/GitHub/goh-
 		ADDED from [:geolocator_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/geolocator_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:13-53
 	android:name
 		ADDED from [:geolocator_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/geolocator_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:13-77
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [:connectivity_plus] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/connectivity_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:7:5-79
+	android:name
+		ADDED from [:connectivity_plus] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/connectivity_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:7:22-76
 intent#action:name:android.support.customtabs.action.CustomTabsService
 ADDED from [:flutter_inappwebview_android] /Users/methashabambarande/Documents/GitHub/goh-vote-md/goh_vote_md/build/flutter_inappwebview_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:9-10:18
 action#android.support.customtabs.action.CustomTabsService

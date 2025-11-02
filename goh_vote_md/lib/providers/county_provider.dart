@@ -27,11 +27,9 @@ class CountyProvider with ChangeNotifier {
 
   String get selectedCounty => _selectedCounty;
   List<String> get counties => _countyContacts.keys.toList();
-  CountyContact? get selectedCountyContact =>
-      _countyContacts[_selectedCounty];
+  CountyContact? get selectedCountyContact => _countyContacts[_selectedCounty];
 
   CountyProvider() {
-    _loadCounty();
     fetchCountyData();
   }
 
@@ -55,15 +53,11 @@ class CountyProvider with ChangeNotifier {
 
   Future<void> fetchCountyData() async {
     try {
-      final url = Uri.parse(
-        sheetsURLStart + gid + sheetsURLEnd,
-      );
-
+      final url = Uri.parse(sheetsURLStart + gid + sheetsURLEnd);
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final csvTable = const CsvToListConverter().convert(response.body);
-
         final rows = csvTable.skip(1);
 
         final Map<String, CountyContact> loadedContacts = {};
@@ -82,6 +76,7 @@ class CountyProvider with ChangeNotifier {
 
         _countyContacts = loadedContacts;
 
+        await _loadCounty();
         if (!_countyContacts.containsKey(_selectedCounty) &&
             _countyContacts.isNotEmpty) {
           _selectedCounty = _countyContacts.keys.first;
