@@ -12,14 +12,16 @@ import '../providers/location_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
 
-class LocationsScreen extends StatefulWidget {
+class LocationsScreen extends StatefulWidget
+{
   const LocationsScreen({super.key});
 
   @override
   State<LocationsScreen> createState() => _LocationsScreenState();
 }
 
-class _LocationsScreenState extends State<LocationsScreen> {
+class _LocationsScreenState extends State<LocationsScreen>
+{
   int _selectedTab = 0;
   String _searchAddress = "";
   double? _searchLat;
@@ -48,7 +50,6 @@ class _LocationsScreenState extends State<LocationsScreen> {
     final locationProvider = Provider.of<LocationProvider>(context);
     final dropBox = locationProvider.dropboxLocations;
     final earlyVoting = locationProvider.earlyLocations;
-    final polling = locationProvider.pollingLocations;
     final countyProvider = Provider.of<CountyProvider>(context);
     final selectedCounty = countyProvider.selectedCounty;
     final screenWidth = Dimensions.screenWidth;
@@ -66,7 +67,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                 title: "Voting Locations",
               ),
 
-              // 🔹 Tab Bar
+              // Tab Bar
               Row(
                 children: [
                   Expanded(
@@ -97,7 +98,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
               const SizedBox(height: 16),
 
-              // 🔹 Search Bar (Drop Box & Early Voting only)
+              // Search Bar (Drop Box & Early Voting only)
               if (_selectedTab == 1 || _selectedTab == 2)
                 Column(
                   children: [
@@ -134,12 +135,10 @@ class _LocationsScreenState extends State<LocationsScreen> {
                   ],
                 ),
 
-              // 🔹 Main Content
+              // Main Content
               if (locationProvider.isLoading)
                 const Center(child: CircularProgressIndicator())
-              else if (dropBox.isEmpty &&
-                  earlyVoting.isEmpty &&
-                  polling.isEmpty)
+              else if (dropBox.isEmpty && earlyVoting.isEmpty)
                 const Center(child: Text("No locations found"))
               else
                 Expanded(
@@ -214,7 +213,8 @@ class _TabButton extends StatelessWidget {
   }
 }
 
-class LocationList extends StatelessWidget {
+class LocationList extends StatelessWidget
+{
   final List<Map<String, String>> locations;
   final bool showMore;
 
@@ -227,9 +227,7 @@ class LocationList extends StatelessWidget {
   Future<void> _openMaps(String address) async {
     final query = Uri.encodeComponent(address);
     final Uri appleUrl = Uri.parse("http://maps.apple.com/?q=$query");
-    final Uri googleUrl = Uri.parse(
-      "https://www.google.com/maps/search/?api=1&query=$query",
-    );
+    final Uri googleUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=$query");
 
     try {
       if (Platform.isIOS) {
@@ -299,8 +297,9 @@ class LocationList extends StatelessWidget {
   }
 }
 
-// 🌍 Distance Calculation
-double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+// Distance Calculation
+double calculateDistance(double lat1, double lon1, double lat2, double lon2)
+{
   const earthRadius = 6371;
   final dLat = (lat2 - lat1) * (pi / 180);
   final dLon = (lon2 - lon1) * (pi / 180);
@@ -314,7 +313,34 @@ double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   return earthRadius * c;
 }
 
-// 🗳️ Drop Box List
+List<Map<String, String>> sortLocations(List<Map<String, String>> locations, double? searchLat, double? searchLng)
+{
+  final sorted = [...locations];
+  if (searchLat != null && searchLng != null)
+  {
+    sorted.sort((a, b)
+    {
+      final d1 = calculateDistance
+      (
+        searchLat,
+        searchLng,
+        double.parse(a["lat"]!),
+        double.parse(a["lng"]!),
+      );
+      final d2 = calculateDistance
+      (
+        searchLat,
+        searchLng,
+        double.parse(b["lat"]!),
+        double.parse(b["lng"]!),
+      );
+      return d1.compareTo(d2);
+    });
+  }
+  return sorted;
+}
+
+// Drop Box List
 class DropBoxLocationsList extends StatelessWidget {
   final List<Map<String, String>> locations;
   final double? searchLat;
@@ -328,30 +354,14 @@ class DropBoxLocationsList extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final sorted = [...locations];
-    if (searchLat != null && searchLng != null) {
-      sorted.sort((a, b) {
-        final d1 = calculateDistance(
-          searchLat!,
-          searchLng!,
-          double.parse(a["lat"]!),
-          double.parse(a["lng"]!),
-        );
-        final d2 = calculateDistance(
-          searchLat!,
-          searchLng!,
-          double.parse(b["lat"]!),
-          double.parse(b["lng"]!),
-        );
-        return d1.compareTo(d2);
-      });
-    }
+  Widget build(BuildContext context)
+  {
+    final sorted = sortLocations(locations, searchLat, searchLng);
     return LocationList(locations: sorted);
   }
 }
 
-// 🗳️ Early Voting List
+// Early Voting List
 class EarlyVotingLocationsList extends StatelessWidget {
   final List<Map<String, String>> locations;
   final double? searchLat;
@@ -366,24 +376,7 @@ class EarlyVotingLocationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sorted = [...locations];
-    if (searchLat != null && searchLng != null) {
-      sorted.sort((a, b) {
-        final d1 = calculateDistance(
-          searchLat!,
-          searchLng!,
-          double.parse(a["lat"]!),
-          double.parse(a["lng"]!),
-        );
-        final d2 = calculateDistance(
-          searchLat!,
-          searchLng!,
-          double.parse(b["lat"]!),
-          double.parse(b["lng"]!),
-        );
-        return d1.compareTo(d2);
-      });
-    }
+    final sorted = sortLocations(locations, searchLat, searchLng);
     return LocationList(locations: sorted);
   }
 }

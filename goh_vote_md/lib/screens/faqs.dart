@@ -4,7 +4,6 @@ import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
 import '../data/faq_answers.dart';
-import '../widgets/nav_bar.dart';
 
 class ExpandableSection extends StatefulWidget
 {
@@ -106,7 +105,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                   : CrossFadeState.showSecond,
               firstChild: Padding
               (
-                padding: const EdgeInsets.only(left: 16.0, bottom: 8),
+                padding: const EdgeInsets.only(left: 16.0, bottom: 12, right: 14),
                 child: widget.content,
               ),
               secondChild: const SizedBox.shrink(),

@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     Dimensions.init(context);
     return MaterialApp(
       home: const HomePage(),

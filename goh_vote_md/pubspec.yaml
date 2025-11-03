@@ -45,7 +45,7 @@ flutter:
     - assets/counties.tsv
     - assets/dropbox.csv
     - assets/early.csv
-    - assets/polling.csv
+    - assets/contacts.csv
 
 flutter_icons:
   android: true

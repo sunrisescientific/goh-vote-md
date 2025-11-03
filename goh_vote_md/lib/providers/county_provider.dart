@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:csv/csv.dart';
 import '../data/constants.dart';
 
@@ -18,8 +18,8 @@ class CountyContact {
   });
 }
 
-class CountyProvider with ChangeNotifier {
-  String gid = "521511549";
+class CountyProvider with ChangeNotifier
+{
   String _selectedCounty = "County";
   static const String _countyKey = "selectedCounty";
 
@@ -30,7 +30,7 @@ class CountyProvider with ChangeNotifier {
   CountyContact? get selectedCountyContact => _countyContacts[_selectedCounty];
 
   CountyProvider() {
-    fetchCountyData();
+    _loadCounty();
   }
 
   Future<void> _loadCounty() async {
@@ -51,40 +51,46 @@ class CountyProvider with ChangeNotifier {
     await prefs.setString(_countyKey, county);
   }
 
-  Future<void> fetchCountyData() async {
-    try {
-      final url = Uri.parse(sheetsURLStart + gid + sheetsURLEnd);
-      final response = await http.get(url);
+  Future<void> fetchCountyData() async
+  {
+    try
+    {   
+      final String csvData = await rootBundle.loadString("assets/contacts.csv");
+      final cleaned = csvData.replaceAll('\r', '').replaceAll('\uFEFF', '');
+      final csvTable = const CsvToListConverter(eol: '\n').convert(cleaned);
 
-      if (response.statusCode == 200) {
-        final csvTable = const CsvToListConverter().convert(response.body);
-        final rows = csvTable.skip(1);
+      final rows = csvTable.skip(1);
 
-        final Map<String, CountyContact> loadedContacts = {};
+      final Map<String, CountyContact> loadedContacts = {};
 
-        for (var row in rows) {
-          if (row.length < 5) continue;
+      for (var row in rows)
+      {
+        if (row.length < 5) continue;
 
-          final countyName = row[0].toString().trim();
-          loadedContacts[countyName] = CountyContact(
-            phone: row[1].toString().trim(),
-            email: row[2].toString().trim(),
-            website: row[3].toString().trim(),
-            address: row[4].toString().trim(),
-          );
-        }
-
-        _countyContacts = loadedContacts;
-
-        await _loadCounty();
-        if (!_countyContacts.containsKey(_selectedCounty) &&
-            _countyContacts.isNotEmpty) {
-          _selectedCounty = _countyContacts.keys.first;
-        }
-
-        notifyListeners();
+        final countyName = row[0].toString().trim();
+        loadedContacts[countyName] =
+        CountyContact
+        (
+          phone: row[1].toString().trim(),
+          email: row[2].toString().trim(),
+          website: row[3].toString().trim(),
+          address: row[4].toString().trim(),
+        );
       }
-    } catch (e) {
+
+      _countyContacts = loadedContacts;
+      
+
+      if (!_countyContacts.containsKey(_selectedCounty) &&
+          _countyContacts.isNotEmpty)
+      {
+        _selectedCounty = _countyContacts.keys.first;
+      }
+
+      notifyListeners();
+    }
+    catch (e)
+    {
       print("Error fetching county data: $e");
     }
   }

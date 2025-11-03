@@ -352,7 +352,6 @@ final List<RichText> votingAnswersFormatted =
       ],
     ),
   ),
-  ), 
 
   RichText
   (
