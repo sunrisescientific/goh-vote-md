@@ -6,7 +6,6 @@ class LocationProvider with ChangeNotifier
 {
   List<Map<String, String>> dropboxLocations = [];
   List<Map<String, String>> earlyLocations = [];
-  List<Map<String, String>> pollingLocations = [];
 
   bool isLoading = false;
 
@@ -19,7 +18,6 @@ class LocationProvider with ChangeNotifier
     ([
       fetchDropBoxData(),
       fetchEarlyData(),
-      fetchPollingData(),
     ]);
 
     isLoading = false;
@@ -70,12 +68,6 @@ class LocationProvider with ChangeNotifier
   Future<void> fetchEarlyData() async
   {
     earlyLocations = await fetch("assets/early.csv");
-    notifyListeners();
-  }
-
-  Future<void> fetchPollingData() async
-  {
-    pollingLocations = await fetch("assets/polling.csv");
     notifyListeners();
   }
 }

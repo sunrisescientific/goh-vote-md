@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:goh_vote_md/providers/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/county_provider.dart';
@@ -43,6 +42,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Dimensions.init(context);
     return MaterialApp(
       home: const HomePage(),
       theme: ThemeData(scaffoldBackgroundColor: BACKGROUND),
@@ -130,7 +130,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Dimensions.init(context);
     final homeState = context.findAncestorStateOfType<_HomePageState>();
     final screenHeight = Dimensions.screenHeight;
     final screenWidth =  Dimensions.screenWidth;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/county_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart'; 
 import '../data/constants.dart';
 
@@ -28,7 +28,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       )
       ..setBackgroundColor(const Color(0xFFFFFFFF))
       ..loadRequest(
-        Uri.parse('https://voterservices.elections.maryland.gov/PollingPlaceSearch'),
+        Uri.parse('https://voterservices.elections.maryland.gov/votersearch'),
       );
   }
 

@@ -51,6 +51,15 @@ TextStyle smallDetails2 = TextStyle(
   fontWeight: FontWeight.w500,
 );
 
+//directions text, calendar dates
+TextStyle smallLinks = TextStyle(
+  fontSize: Dimensions.screenHeight * 0.014,
+  fontFamily: "Inter",
+  color: Colors.blue,
+  fontWeight: FontWeight.w500,
+  decoration: TextDecoration.underline,
+);
+
 //faqs categories, helpful links buttons
 TextStyle heading2 = TextStyle(
   fontSize: Dimensions.screenHeight * 0.023,

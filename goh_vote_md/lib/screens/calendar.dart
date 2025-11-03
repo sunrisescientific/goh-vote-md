@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/county_provider.dart';
-import '../widgets/screen_header.dart';
-import '../data/constants.dart';
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:intl/intl.dart';
+import '../widgets/screen_header.dart';
 import '../providers/calendar_provider.dart';
+import '../providers/county_provider.dart';
+import '../data/constants.dart';
 
 class ExpandableSection extends StatefulWidget
 {
@@ -95,13 +95,6 @@ class _ExpandableSectionState extends State<ExpandableSection>
                           ),
                         ],
                       ),
-                      SizedBox(height: 12),
-                      Text
-                      (
-                        "Voting day: ${DateFormat('MMMM d, y').format(widget.event.date)}",
-                        style: smallDetails,
-                        softWrap: true,
-                      ),
                     ],
                   )
                 ),
@@ -123,41 +116,10 @@ class _ExpandableSectionState extends State<ExpandableSection>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:
                   [
-                    ElevatedButton
-                    (
-                      onPressed: ()
-                      {
-                        final Event event = Event
-                        (
-                          title: widget.event.name,
-                          description: 'Vote!',
-                          location: 'Polling location',
-                          startDate: widget.event.date,
-                          endDate: widget.event.date.add(const Duration(hours: 13)),
-                        );
-                        Add2Calendar.addEvent2Cal(event);
-                      },
-                      style: ElevatedButton.styleFrom
-                      (
-                        backgroundColor: Color(0xFF484848),
-                        padding: EdgeInsets.symmetric
-                        (
-                          horizontal: 14,
-                          vertical: 6,
-                        ),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: Text
-                      (
-                        "Add to calendar",
-                        style: smallDetails2
-                      ),
-                    ),
                     SizedBox(height: 12),
                     Text
                     (
-                      "Early voting: ${DateFormat('MMMM d, y').format(widget.event.earlyStart)} to ${DateFormat('MMMM d, y').format(widget.event.earlyEnd)}",
+                      "${DateFormat('MMMM d, y hh:mm a').format(widget.event.start)} to ${DateFormat('MMMM d, y hh:mm a').format(widget.event.end)}",
                       style: smallDetails,
                       softWrap: true,
                     ),
@@ -168,12 +130,10 @@ class _ExpandableSectionState extends State<ExpandableSection>
                       {
                         final Event event = Event
                         (
-                          title: "${widget.event.name} Early Voting",
-                          description: 'Vote!',
-                          location: 'Polling location',
-                          startDate: widget.event.earlyStart,
-                          endDate: widget.event.earlyEnd,
-                          allDay: true,
+                          title: widget.event.name,
+                          startDate: widget.event.start,
+                          endDate: widget.event.end,
+                          allDay: false,
                         );
                         Add2Calendar.addEvent2Cal(event);
                       },
@@ -194,6 +154,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                         style: smallDetails2
                       ),
                     ),
+                    /*
                     SizedBox(height: 20),
                     Align
                     (
@@ -220,6 +181,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
                         ),
                       ),
                     )
+                    */
                   ],
                 ),
               ),

@@ -6,16 +6,14 @@ import 'package:intl/intl.dart';
 class ElectionEvent
 {
   final String name;
-  final DateTime date;
-  final DateTime earlyStart;
-  final DateTime earlyEnd;
+  final DateTime start;
+  final DateTime end;
 
   ElectionEvent
   ({
     required this.name,
-    required this.date,
-    required this.earlyStart,
-    required this.earlyEnd,
+    required this.start,
+    required this.end,
   });
 }
 
@@ -31,11 +29,11 @@ class CalendarProvider with ChangeNotifier
     fetchCalendarData();
   }
 
-  DateTime parseDate(String dateStr)
+  DateTime parseDate(String dateStr, String timeStr)
   {
-    final dateFormatter = DateFormat("EEEE, MMMM dd, yyyy");
-    final parsedDate = dateFormatter.parse(dateStr);
-    return DateTime(parsedDate.year, parsedDate.month, parsedDate.day, 7);
+    final dateFormatter = DateFormat("EEEE MMMM dd yyyy h:mm a");
+    final parsedDate = dateFormatter.parse("$dateStr $timeStr");
+    return DateTime(parsedDate.year, parsedDate.month, parsedDate.day, parsedDate.hour, parsedDate.minute);
   }
 
   Future<void> fetchCalendarData() async
@@ -58,16 +56,51 @@ class CalendarProvider with ChangeNotifier
 
         for (var row in rows)
         {
-          loadedEvents.add
-          (
-            ElectionEvent
+          if (row[0].toString() == '')
+          {
+            break;
+          }
+          // If missing start time but has end time, default start is 7:00 am.
+          else if (row[2].toString() == '' && row[3].toString() != '')
+          {
+            DateTime tempEnd = parseDate(row[1].toString().trim(), row[3].toString().trim());
+            DateTime tempStart = tempEnd.subtract(Duration(hours: 1));
+            loadedEvents.add
             (
-              name: row[0].toString().trim(),
-              date: parseDate(row[1].toString().trim()),
-              earlyStart: parseDate(row[3].toString().trim()),
-              earlyEnd: parseDate(row[4].toString().trim()),
-            )
-          );
+              ElectionEvent
+              (
+                name: row[0].toString().trim(),
+                start: tempStart,
+                end: tempEnd,
+              )
+            );
+          }
+          // If missing both start and end time, default start is 7:00 am and end is 8:00 pm.
+          else if (row[2].toString() == '' && row[3].toString() == '')
+          {
+            loadedEvents.add
+            (
+              ElectionEvent
+              (
+                name: row[0].toString().trim(),
+                start: parseDate(row[1].toString().trim(), "7:00 AM"),
+                end: parseDate(row[1].toString().trim(), "8:00 PM"),
+              )
+            );
+          }
+          // If not missing anything, perfect.
+          else
+          {
+            loadedEvents.add
+            (
+              ElectionEvent
+              (
+                name: row[0].toString().trim(),
+                start: parseDate(row[1].toString().trim(), row[2].toString().trim()),
+                end: parseDate(row[1].toString().trim(), row[3].toString().trim()),
+              )
+            );
+          }
         }
 
         calendarEvents = loadedEvents;
