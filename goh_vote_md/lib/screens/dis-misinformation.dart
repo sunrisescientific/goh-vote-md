@@ -1,3 +1,67 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import '../providers/county_provider.dart';
+import '../widgets/screen_header.dart'; 
+import '../data/constants.dart';
+
+class Dis_MisinformationScreen extends StatefulWidget {
+  const Dis_MisinformationScreen({super.key});
+
+  @override
+  State<Dis_MisinformationScreen> createState() => _Dis_MisinformationScreenState();
+}
+
+class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
+  late final WebViewController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+        'AppleWebKit/537.36 (KHTML, like Gecko) '
+        'Chrome/121.0.0.0 Safari/537.36',
+      )
+      ..setBackgroundColor(const Color(0xFFFFFFFF))
+      ..loadRequest(
+        Uri.parse('https://elections.maryland.gov/press_room/Dis-Misinformation.html'),
+      );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final countyProvider = Provider.of<CountyProvider>(context);
+    final selectedCounty = countyProvider.selectedCounty;
+
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            ScreenHeader(
+              logoPath: 'assets/title_logo.png',
+              countyName: selectedCounty,
+              title: "Reporting Misinformation",
+            ),
+
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(Dimensions.screenWidth * 0.02),
+                child: WebViewWidget(controller: controller),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+/*
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -183,7 +247,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
               ScreenHeader(
                 logoPath: 'assets/title_logo.png',
                 countyName: selectedCounty,
-                title: "Reporting Dis/Misinformation",
+                title: "Reporting Misinformation",
               ),
               const SizedBox(height: 15),
               YoutubePlayer(
@@ -392,3 +456,4 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
     );
   }
 }
+*/

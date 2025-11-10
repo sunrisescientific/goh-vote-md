@@ -26,7 +26,7 @@ class _ContactScreenState extends State<ContactScreen> {
       ContactRow(icon: Icons.phone, text: "410-269-2840", url: false),
       ContactRow(icon: Icons.mail, text: "info.sbe@maryland.gov", url: false),
       ContactRow(icon: Icons.language, text: "elections.maryland.gov", url: true),
-      ContactRow(icon: Icons.pin_drop, text: "151 West Street, Suite 200 \nAnnapolis, MD 21401", url: false),
+      ContactRow(icon: Icons.pin_drop, text: "151 West Street, Suite 200 \nAnnapolis, MD 21401", url: true),
       ContactRow(icon: FontAwesomeIcons.twitter, text: "x.com/md_sbe", url: true),
       ContactRow(icon: FontAwesomeIcons.instagram, text: "instagram.com/md_sbe", url: true),
     ];
@@ -38,7 +38,7 @@ class _ContactScreenState extends State<ContactScreen> {
             ContactRow(icon: Icons.phone, text: countyProvider.selectedCountyContact!.phone, url: false),
             ContactRow(icon: Icons.mail, text: countyProvider.selectedCountyContact!.email, url: false),
             ContactRow(icon: Icons.language, text: countyProvider.selectedCountyContact!.website, url: true),
-            ContactRow(icon: Icons.pin_drop, text: countyProvider.selectedCountyContact!.address, url: false),
+            ContactRow(icon: Icons.pin_drop, text: countyProvider.selectedCountyContact!.address, url: true),
           ]
         : [];
 

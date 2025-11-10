@@ -10,12 +10,40 @@ class ContactRow extends StatelessWidget {
   const ContactRow({super.key, required this.icon, required this.text, required this.url});
 
   Future<void> _launchURL(String url) async
-{
+  {
     final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication))
+    {
       throw 'Could not launch $url';
     }
-}
+    Future<void> _launchContact(String value) async
+    {
+      Uri uri;
+
+      if (value.startsWith('http') || value.startsWith('www'))
+      {
+        // Website
+        final fixed = value.startsWith('http') ? value : 'https://$value';
+        uri = Uri.parse(fixed);
+      }
+      else if (value.contains(','))
+      {
+        // Address (Google Maps)
+        final encoded = Uri.encodeComponent(value);
+        uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$encoded');
+      }
+      else
+      {
+        // Fallback
+        uri = Uri.parse('https://$value');
+      }
+
+      if (!await launchUrl(uri, mode: LaunchMode.externalApplication))
+      {
+        debugPrint('Could not launch $uri');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
