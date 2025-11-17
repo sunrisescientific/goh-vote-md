@@ -305,7 +305,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     ElectionButton(
                                       icon: Icons.campaign,
-                                      label: "Dis/Mis-\nInformation",
+                                      label: "Reporting Misinformation",
                                       width: buttonWidth,
                                       onPressed: () =>
                                           homeState?.onItemTapped(3),
@@ -326,7 +326,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     ElectionButton(
                                       icon: Icons.location_on,
-                                      label: "Locations",
+                                      label: "Voting Locations",
                                       width: buttonWidth,
                                       onPressed: () =>
                                           homeState?.onItemTapped(6),
