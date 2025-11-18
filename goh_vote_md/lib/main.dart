@@ -12,7 +12,7 @@ import 'screens/calendar.dart';
 import 'screens/faqs.dart';
 import 'screens/helpful_links.dart';
 import 'screens/locations.dart';
-import 'screens/dis-misinformation.dart';
+import 'screens/misinformation.dart';
 import 'widgets/county_dropdown.dart';
 import 'widgets/nav_bar.dart';
 import 'data/constants.dart';
