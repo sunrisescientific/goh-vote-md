@@ -42,7 +42,6 @@ flutter:
     - assets/title_logo.png
     - assets/top_maryland.png
     - assets/icon.png
-    - assets/counties.tsv
     - assets/dropbox.csv
     - assets/early.csv
     - assets/contacts.csv
