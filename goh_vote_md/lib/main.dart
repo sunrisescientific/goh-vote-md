@@ -227,6 +227,11 @@ class HomeScreen extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                 ),
+                SizedBox(height: screenHeight * 0.006),
+
+                Center(child: Text("Jared DeMarinis, State Administrator", style: smallDetails)),
+
+                SizedBox(height: screenHeight * 0.006),
                 Stack(
                   children: [
                     Image.asset(
@@ -263,19 +268,19 @@ class HomeScreen extends StatelessWidget {
                         ),
                         SizedBox(height: screenHeight * 0.01),
                         Text(
-                          "Select a county and an option below",
+                          "Select one of the options below to get started.",
                           style: TextStyle(fontSize: screenHeight * 0.018),
                         ),
                         SizedBox(height: screenHeight * 0.015),
-                        Row(
-                          children: [
-                            Text(
-                              "Selected county: ",
-                              style: TextStyle(fontSize: screenHeight * 0.018),
-                            ),
-                            const Expanded(child: CountyDropdown()),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Text(
+                        //       "Selected county: ",
+                        //       style: TextStyle(fontSize: screenHeight * 0.018),
+                        //     ),
+                        //     const Expanded(child: CountyDropdown()),
+                        //   ],
+                        // ),
                         SizedBox(height: screenHeight * 0.03),
                         LayoutBuilder(
                           builder: (context, constraints) {
@@ -305,7 +310,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     ElectionButton(
                                       icon: Icons.campaign,
-                                      label: "Dis/Mis-\nInformation",
+                                      label: "Report\nMisInformation",
                                       width: buttonWidth,
                                       onPressed: () =>
                                           homeState?.onItemTapped(3),
@@ -326,7 +331,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     ElectionButton(
                                       icon: Icons.location_on,
-                                      label: "Locations",
+                                      label: "Voting\nLocations",
                                       width: buttonWidth,
                                       onPressed: () =>
                                           homeState?.onItemTapped(6),

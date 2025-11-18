@@ -93,7 +93,9 @@ final List<RichText> votingAnswersFormatted =
           style: smallLinks,
           recognizer: TapGestureRecognizer()..onTap = () => _launchURL("https://elections.maryland.gov/voting/absentee.html")
         ),
-        TextSpan(text: 'Important Note: The law requires the State Board of Elections and each local board of elections to refer to absentee ballots as "mail-in ballots" and absentee voting as "mail-in voting." Please note that this change in terminology does NOT change the process of mail-in voting.'),
+        TextSpan(text: 'Important Note: The law requires the State Board of Elections and each local board of elections to refer to absentee ballots as "mail-in ballots" and absentee voting as "mail-in voting." Please note that this change in terminology does NOT change the process of mail-in voting.\n\n'),
+        TextSpan(text: 'The Gubernatorial Primary Election day is June 23, 2026 from 7 am to 8 pm.'),
+
       ],
     ),
   ),
@@ -107,7 +109,7 @@ final List<RichText> votingAnswersFormatted =
       style: smallDetails,
       children:
       [
-        TextSpan(text: 'For the 2024 Presidential Primary Election:\n\n'),
+        TextSpan(text: 'For the 2026 Presidential Primary Election:\n\n'),
         TextSpan(text: '• During '),
         TextSpan
         (
@@ -136,7 +138,7 @@ final List<RichText> votingAnswersFormatted =
       style: smallDetails,
       children:
       [
-        TextSpan(text: 'For the 2024 Presidential Primary Election:\n\n'),
+        TextSpan(text: 'For the 2026 Presidential Primary Election:\n\n'),
         TextSpan(text: '• During early voting or on election day, you will hand mark a paper ballot. Use the pen provided to fill in the oval next to your choices. You can also mark your ballot electronically. Review your ballot choices, place your voted ballot into the privacy sleeve and take it to the scanner. An election worker will direct you to insert your ballot into the scanning unit to cast your vote. Your ballot will be scanned and dropped into a secure ballot box.\n'),
         TextSpan(text: '• There will be instructions available at the early voting centers and election day polling places to familiarize you with the ballot. You may ask an election judge to explain how to vote, but you must cast your vote alone, unless you are unable to do so because you have a disability or are unable to read or write the English language.\n'),
         TextSpan(text: '• For '),

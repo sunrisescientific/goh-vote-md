@@ -29,33 +29,34 @@ class ScreenHeader extends StatelessWidget {
         ),
 
         SizedBox(height: screenHeight * 0.006),
+        Center(child: Text("Jared DeMarinis, State Administrator", style: smallDetails)),
 
-        SizedBox(
-          height: screenHeight * 0.05,
-          child: ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: MARYLAND_RED,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(roundedCorners)),
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.05,
-                vertical: 0,
-              ),
-            ),
-            onPressed: () {},
-            icon: const Icon(Icons.pin_drop, color: Colors.white, size: 20),
-            label: Text(
-              countyName.toUpperCase(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: screenWidth * 0.04,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+        // SizedBox(
+        //   height: screenHeight * 0.05,
+        //   child: ElevatedButton.icon(
+        //     style: ElevatedButton.styleFrom(
+        //       backgroundColor: MARYLAND_RED,
+        //       shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(roundedCorners)),
+        //       padding: EdgeInsets.symmetric(
+        //         horizontal: screenWidth * 0.05,
+        //         vertical: 0,
+        //       ),
+        //     ),
+        //     onPressed: () {},
+        //     icon: const Icon(Icons.pin_drop, color: Colors.white, size: 20),
+        //     label: Text(
+        //       countyName.toUpperCase(),
+        //       style: TextStyle(
+        //         color: Colors.white,
+        //         fontSize: screenWidth * 0.04,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //   ),
+        // ),
 
-        SizedBox(height: screenHeight * 0.02),
+        SizedBox(height: screenHeight * 0.006),
 
         Text(
           title,

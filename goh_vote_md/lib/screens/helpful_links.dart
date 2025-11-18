@@ -17,10 +17,8 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
   final Map<String, String> helpfulLinks = {
     "Register to Vote": "https://voterservices.elections.maryland.gov/OnlineVoterRegistration/InstructionsStep1",
     "Become a Poll Worker": "https://elections.maryland.gov/get_involved/registration_volunteers.html",
-    "Become an Election Judge": "https://elections.maryland.gov/get_involved/election_judges_form.html",
-    "Press Releases": "https://elections.maryland.gov/press_room/index.html",
+    "Elections News and Updates": "https://elections.maryland.gov/press_room/index.html",
     "Request a Mail-in Ballot": "https://voterservices.elections.maryland.gov/OnlineMailinRequest/InstructionsStep1",
-    "Permanent Mail-in": "https://elections.maryland.gov/voting/absentee.html",
   };
 
   Future<void> _launchURL(String url) async {
