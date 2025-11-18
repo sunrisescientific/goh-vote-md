@@ -23,22 +23,24 @@ class _ContactScreenState extends State<ContactScreen> {
     final selectedCounty = countyProvider.selectedCounty;
 
     final stateRows = const [
-      ContactRow(icon: Icons.phone, text: "410-269-2840", url: false),
-      ContactRow(icon: Icons.mail, text: "info.sbe@maryland.gov", url: false),
-      ContactRow(icon: Icons.language, text: "elections.maryland.gov", url: true),
-      ContactRow(icon: Icons.pin_drop, text: "151 West Street, Suite 200 \nAnnapolis, MD 21401", url: false),
-      ContactRow(icon: FontAwesomeIcons.twitter, text: "x.com/md_sbe", url: true),
-      ContactRow(icon: FontAwesomeIcons.instagram, text: "instagram.com/md_sbe", url: true),
+      ContactRow(icon: Icons.phone, text: "410-269-2840", url: true, type: "phone"),
+      ContactRow(icon: Icons.mail, text: "info.sbe@maryland.gov", url: true, type: "email"),
+      ContactRow(icon: Icons.language, text: "elections.maryland.gov", url: true, type: "website"),
+      ContactRow(icon: Icons.pin_drop, text: "151 West Street, Suite 200 \nAnnapolis, MD 21401", url: true, type: "address"),
+      ContactRow(icon: FontAwesomeIcons.twitter, text: "x.com/md_sbe", url: true, type: "social"),
+      ContactRow(icon: FontAwesomeIcons.instagram, text: "instagram.com/md_sbe", url: true, type: "social"),
+      ContactRow(icon: FontAwesomeIcons.facebook, text: "facebook.com/MarylandStateBoardofElections", url: true, type: "social"),
+      ContactRow(icon: FontAwesomeIcons.youtube, text: "youtube.com/channel/UCSlRSVe3Q3mwn26BCeAL7tw/videos", url: true, type: "social"),
     ];
 
     Widget countyDropdown = CountyDropdown();
 
     List<ContactRow> countyRows = countyProvider.selectedCountyContact != null
         ? [
-            ContactRow(icon: Icons.phone, text: countyProvider.selectedCountyContact!.phone, url: false),
-            ContactRow(icon: Icons.mail, text: countyProvider.selectedCountyContact!.email, url: false),
-            ContactRow(icon: Icons.language, text: countyProvider.selectedCountyContact!.website, url: true),
-            ContactRow(icon: Icons.pin_drop, text: countyProvider.selectedCountyContact!.address, url: false),
+            ContactRow(icon: Icons.phone, text: countyProvider.selectedCountyContact!.phone, url: true, type: "phone"),
+            ContactRow(icon: Icons.mail, text: countyProvider.selectedCountyContact!.email, url: true, type: "email"),
+            ContactRow(icon: Icons.language, text: countyProvider.selectedCountyContact!.website, url: true, type: "website"),
+            ContactRow(icon: Icons.pin_drop, text: countyProvider.selectedCountyContact!.address, url: true, type: "address"),
           ]
         : [];
 
@@ -55,14 +57,14 @@ class _ContactScreenState extends State<ContactScreen> {
                 title: "Contact",
               ),
 
-              ContactCard(title: "State Board of Election Contact", rows: stateRows),
+              ContactCard(title: "State Board of Elections Contact", rows: stateRows),
               if (countyProvider.selectedCountyContact != null)
-                ContactCard(title: "$selectedCounty Election Office Contact", rows: countyRows, dropdown: countyDropdown),
+                ContactCard(title: "$selectedCounty Election Offices Contact", rows: countyRows, dropdown: countyDropdown),
               if (countyProvider.selectedCountyContact == null)
                 Container(
                   margin: const EdgeInsets.only(bottom: 16.0),
                   child: ContactCard(
-                    title: "State Election Office Contacts",
+                    title: "State Election Offices Contacts",
                     rows: [],
                     dropdown: countyDropdown,
                   ),
