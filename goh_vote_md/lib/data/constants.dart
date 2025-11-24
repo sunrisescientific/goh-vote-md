@@ -22,7 +22,7 @@ const double roundedCorners = 12.0;
 //contacts small header, locations name and tab
 TextStyle heading3 = TextStyle(
   fontSize: Dimensions.screenHeight * 0.018,
-  fontFamily: "Inter",
+  // fontFamily: "Inter",
   color: Colors.black,
   fontWeight: FontWeight.bold,
 );
@@ -30,7 +30,7 @@ TextStyle heading3 = TextStyle(
 //locations tab
 TextStyle heading3Selected = TextStyle(
   fontSize: Dimensions.screenHeight * 0.018,
-  fontFamily: "Inter",
+  // fontFamily: "Inter",
   color: Colors.white,
   fontWeight: FontWeight.bold,
 );
@@ -38,7 +38,7 @@ TextStyle heading3Selected = TextStyle(
 //directions text, calendar dates
 TextStyle smallDetails = TextStyle(
   fontSize: Dimensions.screenHeight * 0.014,
-  fontFamily: "Inter",
+  // fontFamily: "Inter",
   color: Colors.black,
   fontWeight: FontWeight.w500,
 );
@@ -46,7 +46,7 @@ TextStyle smallDetails = TextStyle(
 //upcoming elections text, add to calendar buttons
 TextStyle smallDetails2 = TextStyle(
   fontSize: Dimensions.screenHeight * 0.014,
-  fontFamily: "Inter",
+  // fontFamily: "Inter",
   color: Colors.white,
   fontWeight: FontWeight.w500,
 );
@@ -54,7 +54,7 @@ TextStyle smallDetails2 = TextStyle(
 //directions text, calendar dates
 TextStyle smallLinks = TextStyle(
   fontSize: Dimensions.screenHeight * 0.014,
-  fontFamily: "Inter",
+  // fontFamily: "Inter",
   color: Colors.blue,
   fontWeight: FontWeight.w500,
   decoration: TextDecoration.underline,
@@ -63,7 +63,7 @@ TextStyle smallLinks = TextStyle(
 //faqs categories, helpful links buttons
 TextStyle heading2 = TextStyle(
   fontSize: Dimensions.screenHeight * 0.023,
-  fontFamily: "Inter",
+  // fontFamily: "Inter",
   color: MARYLAND_RED,
   fontWeight: FontWeight.w600,
   shadows:

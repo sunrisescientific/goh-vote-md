@@ -11,6 +11,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../providers/county_provider.dart';
 import '../providers/location_provider.dart';
 import '../widgets/screen_header.dart';
+import '../widgets/county_dropdown.dart';
 import '../data/constants.dart';
 
 class LocationsScreen extends StatefulWidget {
@@ -172,20 +173,29 @@ class _LocationsScreenState extends State<LocationsScreen> {
                     ),
                     const SizedBox(height: 10),
 
-                    ElevatedButton.icon(
-                      onPressed: _useCurrentLocation,
-                      icon: const Icon(Icons.my_location, color: Colors.white),
-                      label: const Text(
-                        "Use My Current Location",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: MARYLAND_RED,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(roundedCorners),
+                    Row(
+                      children: [ 
+                        ElevatedButton.icon(
+                          onPressed: _useCurrentLocation,
+                          icon: const Icon(Icons.my_location, color: Colors.white),
+                          label: const Text(
+                            "Use My Current Location",
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: MARYLAND_RED,
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(roundedCorners),
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 10),
+
+                        CountyDropdown(),
+                        
+                      ]
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -202,12 +212,13 @@ class _LocationsScreenState extends State<LocationsScreen> {
                     children: [
                       const PollingPlace(),
                       DropBoxLocationsList(
-                        locations: dropBox
-                            .where((loc) => loc['county'] == selectedCounty)
-                            .toList(),
+                        locations: selectedCounty == "County"
+                            ? dropBox
+                            : dropBox.where((loc) => loc['county'] == selectedCounty).toList(),
                         searchLat: _searchLat,
                         searchLng: _searchLng,
                       ),
+
                       EarlyVotingLocationsList(
                         locations: earlyVoting
                             .where((loc) => loc['county'] == selectedCounty)
@@ -215,6 +226,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                         searchLat: _searchLat,
                         searchLng: _searchLng,
                       ),
+
                     ],
                   ),
                 ),

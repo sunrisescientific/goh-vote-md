@@ -59,7 +59,8 @@ class CountyProvider with ChangeNotifier
       final cleaned = csvData.replaceAll('\r', '').replaceAll('\uFEFF', '');
       final csvTable = const CsvToListConverter(eol: '\n').convert(cleaned);
 
-      final rows = csvTable.skip(1);
+      final rows = csvTable;
+      //.skip(1)
 
       final Map<String, CountyContact> loadedContacts = {};
 

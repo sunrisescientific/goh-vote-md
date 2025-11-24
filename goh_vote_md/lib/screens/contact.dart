@@ -58,9 +58,9 @@ class _ContactScreenState extends State<ContactScreen> {
               ),
 
               ContactCard(title: "State Board of Elections Contact", rows: stateRows),
-              if (countyProvider.selectedCountyContact != null)
+              if (countyProvider.selectedCountyContact != null && countyProvider.selectedCounty != 'County')
                 ContactCard(title: "$selectedCounty Election Offices Contact", rows: countyRows, dropdown: countyDropdown),
-              if (countyProvider.selectedCountyContact == null)
+              if (countyProvider.selectedCountyContact == null || countyProvider.selectedCounty == 'County')
                 Container(
                   margin: const EdgeInsets.only(bottom: 16.0),
                   child: ContactCard(

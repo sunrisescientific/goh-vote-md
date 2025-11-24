@@ -19,6 +19,7 @@ class _HelpfulLinksScreenState extends State<HelpfulLinksScreen> {
     "Become a Poll Worker": "https://elections.maryland.gov/get_involved/registration_volunteers.html",
     "Elections News and Updates": "https://elections.maryland.gov/press_room/index.html",
     "Request a Mail-in Ballot": "https://voterservices.elections.maryland.gov/OnlineMailinRequest/InstructionsStep1",
+    "Campaign Finance Reports": "https://elections.maryland.gov/forms/campaign_finance.html"
   };
 
   Future<void> _launchURL(String url) async {
