@@ -45,6 +45,11 @@ flutter:
     - assets/dropbox.csv
     - assets/early.csv
     - assets/contacts.csv
+  
+  fonts:
+    - family: MDLogoFont
+      fonts:
+        - asset: assets/fonts/MYRIADPRO-REGULAR.otf
 
 flutter_icons:
   android: true

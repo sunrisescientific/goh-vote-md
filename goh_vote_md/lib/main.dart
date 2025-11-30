@@ -13,12 +13,19 @@ import 'screens/faqs.dart';
 import 'screens/helpful_links.dart';
 import 'screens/locations.dart';
 import 'screens/misinformation.dart';
-import 'widgets/county_dropdown.dart';
 import 'widgets/nav_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'data/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  LicenseRegistry.addLicense(() async* {
+    yield LicenseEntryWithLineBreaks(['MDLogoFont'], 
+      "Myriad is either a registered trademark or a trademark of Adobe Systems Incorporated in the United States and/or other countries.\n"
+      "© 1992, 1994, 1997, 2000, 2004 Adobe Systems Incorporated.\n" 
+      "All rights reserved. http://www.adobe.com/type/legal.html");
+  });
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -44,7 +51,7 @@ class MyApp extends StatelessWidget {
     Dimensions.init(context);
     return MaterialApp(
       home: const HomePage(),
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white, fontFamily: 'MDLogoFont'),
     );
   }
 }
