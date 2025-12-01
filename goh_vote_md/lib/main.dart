@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
     Dimensions.init(context);
     return MaterialApp(
       home: const HomePage(),
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
     );
   }
