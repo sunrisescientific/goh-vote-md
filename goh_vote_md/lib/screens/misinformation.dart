@@ -2,11 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 import '../providers/county_provider.dart';
 import '../widgets/screen_header.dart';
 import '../data/constants.dart';
@@ -127,8 +124,18 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
       }),
     );
 
-    launchUrl(emailLaunchUri);
-    _isSending = false;
+    await launchUrl(emailLaunchUri);
+
+    setState(() {
+      _isSending = false;
+      _nameController.clear();
+      _emailController.clear();
+      _phoneController.clear();
+      _dateController.clear();
+      _locationController.clear();
+      _descriptionController.clear();
+      FocusScope.of(context).unfocus(); //removing the focus from textbox, which disables the keyboard
+    });
   }
 
   @override
