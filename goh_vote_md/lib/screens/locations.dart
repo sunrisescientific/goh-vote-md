@@ -244,6 +244,8 @@ class _LocationsScreenState extends State<LocationsScreen> {
                         )
                         : EarlyVotingLocationsList(
                           locations:
+                          selectedCounty == "County"
+                          ? earlyVoting :
                               earlyVoting
                                   .where(
                                     (loc) => loc['county'] == selectedCounty,
