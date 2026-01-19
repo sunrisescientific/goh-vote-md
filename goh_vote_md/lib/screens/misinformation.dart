@@ -117,7 +117,7 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
     """;
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: 'AAEMPLOYEE@gmail.com', //change to AA drop-in email
+      path: 'morgan.rhoden@maryland.gov', //change to AA drop-in email
       query: encodeQueryParameters(<String, String>{
         'subject': "Misinformation form submission by ${_nameController.text}",
         'body': "${report}",
