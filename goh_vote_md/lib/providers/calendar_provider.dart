@@ -42,7 +42,7 @@ class CalendarProvider with ChangeNotifier
     {
       final url = Uri.parse
       (
-        "https://docs.google.com/spreadsheets/d/1POThZzWf2AmqmtxBqVz5VPOc1eZb5TP-vKj2adXb0ag/export?format=csv&gid=1916710181"
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3DxTAedgfG8BxJyOZcs07iPHYnMeVe59D8OIjos4IrusMtkQX7WSH0QKKdZBHL3cP8855iT96a-as/pub?output=csv"
       );
 
       final response = await http.get(url);

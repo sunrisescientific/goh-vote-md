@@ -31,7 +31,7 @@ final List<String> votingQuestionsFormatted =
   "How do I know if my request for a ballot was received and processed?",
   "Can I have someone pick up my ballot?",
   "How will I receive my mail-in voting ballot?",
-  "How do I return my main-in voting ballot?",
+  "How do I return my mail-in voting ballot?",
   "Is accessible voting available?",
   "Is there a way I mark my mail-in ballot without help?",
   "Can someone help me vote?",

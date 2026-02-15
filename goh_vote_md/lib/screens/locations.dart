@@ -184,40 +184,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
 
                     const SizedBox(height: 10),
 
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.485,
-                          child: ElevatedButton.icon(
-                            onPressed: _useCurrentLocation,
-                            icon: const Icon(
-                              Icons.my_location,
-                              color: Colors.white,
-                            ),
-                            label: const Text(
-                              "Use My Current Location",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: MARYLAND_RED,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  roundedCorners,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(width: 5),
-
-                        CountyDropdown(),
-                      ],
-                    ),
+                    Row(children: [const SizedBox(width: 5), CountyDropdown()]),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -244,13 +211,14 @@ class _LocationsScreenState extends State<LocationsScreen> {
                         )
                         : EarlyVotingLocationsList(
                           locations:
-                          selectedCounty == "County"
-                          ? earlyVoting :
-                              earlyVoting
-                                  .where(
-                                    (loc) => loc['county'] == selectedCounty,
-                                  )
-                                  .toList(),
+                              selectedCounty == "County"
+                                  ? earlyVoting
+                                  : earlyVoting
+                                      .where(
+                                        (loc) =>
+                                            loc['county'] == selectedCounty,
+                                      )
+                                      .toList(),
                           searchLat: _searchLat,
                           searchLng: _searchLng,
                         ),
@@ -303,7 +271,6 @@ class _TabButton extends StatelessWidget {
 class LocationList extends StatelessWidget {
   final List<Map<String, String>> locations;
   final bool showMore;
-
   const LocationList({
     super.key,
     required this.locations,
@@ -343,44 +310,61 @@ class LocationList extends StatelessWidget {
           ),
         ],
       ),
-      child: ListView.separated(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(8),
-        itemCount: locations.length + (showMore ? 1 : 0),
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
-          if (showMore && index == locations.length) {
-            return const SizedBox.shrink();
-          }
-
-          final loc = locations[index];
-          return ListTile(
-            title: Text(loc["name"]!, style: heading3),
-            subtitle: Text(loc["address"]!),
-            trailing: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () => _openMaps(loc["address"]!),
-                  child: CircleAvatar(
-                    radius: 19,
-                    backgroundColor: MARYLAND_RED,
-                    child: const Icon(Icons.map, color: Colors.white, size: 20),
-                  ),
-                ),
-                const Text(
-                  "Directions",
+      child:
+          locations.isEmpty
+              ? Container(
+                padding: const EdgeInsets.all(8),
+                color: const Color.fromARGB(255, 255, 255, 255),
+                child: const Text(
+                  'Data is currently unavailable for this county',
                   style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              )
+              : ListView.separated(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(8),
+                itemCount: locations.length + (showMore ? 1 : 0),
+                separatorBuilder: (context, index) => const Divider(),
+                itemBuilder: (context, index) {
+                  if (showMore && index == locations.length) {
+                    return const SizedBox.shrink();
+                  }
+
+                  final loc = locations[index];
+                  return ListTile(
+                    title: Text(loc["name"]!, style: heading3),
+                    subtitle: Text(loc["address"]!),
+                    trailing: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () => _openMaps(loc["address"]!),
+                          child: CircleAvatar(
+                            radius: 19,
+                            backgroundColor: MARYLAND_RED,
+                            child: const Icon(
+                              Icons.map,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          "Directions",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
     );
   }
 }

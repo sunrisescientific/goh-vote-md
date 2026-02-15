@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -27,8 +27,8 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
   final _locationController = TextEditingController();
   final _descriptionController = TextEditingController();
 
-  File? _selectedFile;
-  bool _sendCopy = false;
+  // File? _selectedFile;
+  // bool _sendCopy = false;
   bool _isSending = false;
   String? _message;
 
@@ -61,14 +61,14 @@ class _Dis_MisinformationScreenState extends State<Dis_MisinformationScreen> {
     );
   }
 
-  Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        _selectedFile = File(result.files.single.path!);
-      });
-    }
-  }
+  // Future<void> _pickFile() async {
+  //   final result = await FilePicker.platform.pickFiles(type: FileType.image);
+  //   if (result != null && result.files.single.path != null) {
+  //     setState(() {
+  //       _selectedFile = File(result.files.single.path!);
+  //     });
+  //   }
+  // }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Please enter your email';

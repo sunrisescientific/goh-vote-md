@@ -6,7 +6,7 @@
 <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <application
-        android:label="Goh Vote Maryland"
+        android:label="Go Vote MD"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

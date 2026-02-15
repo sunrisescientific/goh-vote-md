@@ -95,7 +95,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> checkConnectivity() async {
     final results = await Connectivity().checkConnectivity();
-    final online = results.isNotEmpty && results.first != ConnectivityResult.none;
+    final online =
+        results.isNotEmpty && results.first != ConnectivityResult.none;
     setState(() => _isOnline = online);
 
     if (!online && mounted) {
@@ -128,10 +129,12 @@ class _HomePageState extends State<HomePage> {
       locations.initialize();
     });
 
-    _connectivitySubscription =
-        Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((
+      List<ConnectivityResult> results,
+    ) {
       final hasConnection =
-          results.isNotEmpty && results.any((r) => r != ConnectivityResult.none);
+          results.isNotEmpty &&
+          results.any((r) => r != ConnectivityResult.none);
 
       if (!hasConnection) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -190,8 +193,11 @@ class _HomePageState extends State<HomePage> {
             height: 55,
             child: FloatingActionButton(
               backgroundColor: MARYLAND_YELLOW,
-              child:
-                  const Icon(Icons.question_mark, size: 22, color: Colors.white),
+              child: const Icon(
+                Icons.question_mark,
+                size: 22,
+                color: Colors.white,
+              ),
               onPressed: () => onItemTapped(7),
             ),
           ),
@@ -230,7 +236,12 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: screenHeight * 0.006),
 
-                Center(child: Text("Jared DeMarinis, State Administrator", style: smallDetails)),
+                Center(
+                  child: Text(
+                    "Jared DeMarinis, State Administrator",
+                    style: smallDetails,
+                  ),
+                ),
 
                 SizedBox(height: screenHeight * 0.006),
                 Stack(
@@ -246,26 +257,27 @@ class HomeScreen extends StatelessWidget {
                         top: screenHeight * 0.08,
                         left: screenWidth * 0.04,
                       ),
-                      child: Text("GOH\nVote\nMaryland", style: appName),
+                      child: Text("GO\nVote\nMaryland", style: appName),
                     ),
                   ],
                 ),
                 Transform.translate(
                   offset: Offset(0, -screenHeight * 0.05),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Welcome!",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: screenHeight * 0.06,
-                              ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.headlineLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenHeight * 0.06,
+                          ),
                         ),
                         SizedBox(height: screenHeight * 0.01),
                         Text(
@@ -285,9 +297,10 @@ class HomeScreen extends StatelessWidget {
                         SizedBox(height: screenHeight * 0.03),
                         LayoutBuilder(
                           builder: (context, constraints) {
-                            final double buttonWidth =
-                                ((constraints.maxWidth - screenWidth * 0.04) / 2)
-                                    .clamp(0, double.infinity);
+                            final double buttonWidth = ((constraints.maxWidth -
+                                        screenWidth * 0.04) /
+                                    2)
+                                .clamp(0, double.infinity);
                             return Column(
                               children: [
                                 Wrap(
@@ -299,49 +312,61 @@ class HomeScreen extends StatelessWidget {
                                       icon: Icons.person,
                                       label: "Check\nRegistration",
                                       width: buttonWidth,
-                                      onPressed: () =>
-                                          homeState?.onItemTapped(1),
+                                      onPressed:
+                                          () => homeState?.onItemTapped(1),
                                     ),
                                     ElectionButton(
                                       icon: Icons.calendar_today,
                                       label: "Election\nCalendar",
                                       width: buttonWidth,
-                                      onPressed: () =>
-                                          homeState?.onItemTapped(2),
+                                      onPressed:
+                                          () => homeState?.onItemTapped(2),
                                     ),
                                     ElectionButton(
                                       icon: Icons.campaign,
                                       label: "Report\nMisInformation",
                                       width: buttonWidth,
-                                      onPressed: () =>
-                                          homeState?.onItemTapped(3),
+                                      onPressed:
+                                          () => homeState?.onItemTapped(3),
                                     ),
                                     ElectionButton(
                                       icon: Icons.phone,
                                       label: "Contact",
                                       width: buttonWidth,
-                                      onPressed: () =>
-                                          homeState?.onItemTapped(4),
+                                      onPressed:
+                                          () => homeState?.onItemTapped(4),
                                     ),
                                     ElectionButton(
                                       icon: Icons.link,
                                       label: "Helpful Links",
                                       width: buttonWidth,
-                                      onPressed: () =>
-                                          homeState?.onItemTapped(5),
+                                      onPressed:
+                                          () => homeState?.onItemTapped(5),
                                     ),
                                     ElectionButton(
                                       icon: Icons.location_on,
                                       label: "Voting\nLocations",
                                       width: buttonWidth,
-                                      onPressed: () =>
-                                          homeState?.onItemTapped(6),
+                                      onPressed:
+                                          () => homeState?.onItemTapped(6),
                                     ),
                                   ],
                                 ),
                               ],
                             );
                           },
+                        ),
+                        SizedBox(height: screenHeight * 0.01),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "This app is for voter education purposes and developed in collaboration with the Maryland State Board of Elections",
+                                style: TextStyle(fontSize: screenHeight * 0.01),
+                                softWrap: true,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: screenHeight * 0.12),
                       ],
@@ -382,18 +407,12 @@ class ElectionButton extends StatelessWidget {
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
           backgroundColor: MARYLAND_RED,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.015),
         ),
         onPressed: onPressed,
         icon: Icon(icon, size: homePageIconSize, color: Colors.white),
-        label: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: homePageButtons,
-        ),
+        label: Text(label, textAlign: TextAlign.center, style: homePageButtons),
       ),
     );
   }

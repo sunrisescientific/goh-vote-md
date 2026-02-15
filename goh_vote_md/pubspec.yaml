@@ -24,7 +24,6 @@ dependencies:
   csv: ^6.0.0
   shared_preferences: ^2.5.3
   youtube_player_flutter: ^9.1.2
-  file_picker: ^10.3.3
   dotted_border: ^2.1.0
   mailer: ^6.5.0
   font_awesome_flutter: ^10.9.1
