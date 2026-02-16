@@ -364,6 +364,7 @@ class HomeScreen extends StatelessWidget {
                                 "This app is for voter education purposes and developed in collaboration with the Maryland State Board of Elections",
                                 style: TextStyle(fontSize: screenHeight * 0.01),
                                 softWrap: true,
+                                textAlign: TextAlign.center, 
                               ),
                             ),
                           ],
